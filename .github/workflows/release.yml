@@ -1,0 +1,30 @@
+name: Trigger release
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  run-ci:
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    name: Run Type Check & Linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Deploy new release
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: '--prod' #Optional
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} #Required
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required
+          working-directory: ./
