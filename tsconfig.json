@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "ES6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/e2e/*": ["./e2e/*"],
+      "@/public/*": ["./public/*"]
+    },
+    "incremental": true
+  },
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "include": [
+    "next-env.d.ts",
+    "desc.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/pages/_error.js",
+    "jest.setup.js",
+    "jest.config.js"
+  ]
+}

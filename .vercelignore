@@ -1,0 +1,18 @@
+# Ignore everything (folders and files) on root only
+/*
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+!public
+!vercel.json
+!package.json
+!yarn.lock
+!src
+!tsconfig.json
+!postcss.config.js
+!.prettierrc
+!next.config.js
+!.swcrc
+!vercel.json
