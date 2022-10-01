@@ -96,15 +96,7 @@ const AssetsImageList = ({ assets }: Props) => {
                 target="_blank"
                 href={`https://algoexplorer.io/asset/${item.index}`}
               >
-                View
-              </Button>
-              <Button
-                size="small"
-                variant="outlined"
-                target="_blank"
-                href={`https://nftexplorer.app/asset/${item.index}`}
-              >
-                NFTx
+                AlgoExplorer
               </Button>
               <Button
                 size="small"

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { CITY_MANAGER_ADDRESS } from '@/common/constants';
 import { ChainType } from '@/models/Chain';
 import { indexerForChain } from '@/utils/algorand';
 
@@ -30,9 +31,9 @@ export default async function getPackPurchaseTxns(
     const operation = `pp`;
     const encodedPrefix = Buffer.from(`awe_${operation}_`).toString(`base64`);
 
-    let request = await indexerForChain(chain)
+    let request = indexerForChain(chain)
       .searchForTransactions()
-      .address(`TSYD5NUVJZLYB3MDFZSAVCSXDDH3ZABDDUARUDAWTU7KVMNVHCH2NQOYWE`)
+      .address(CITY_MANAGER_ADDRESS)
       .txType(`pay`)
       .notePrefix(encodedPrefix)
       .limit(maxResults);
@@ -49,14 +50,19 @@ export default async function getPackPurchaseTxns(
       txns.push(...response[`transactions`]);
 
       while (`next-token` in response) {
-        response = await indexerForChain(chain)
+        response = indexerForChain(chain)
           .searchForTransactions()
-          .address(`TSYD5NUVJZLYB3MDFZSAVCSXDDH3ZABDDUARUDAWTU7KVMNVHCH2NQOYWE`)
+          .address(CITY_MANAGER_ADDRESS)
           .txType(`pay`)
           .notePrefix(encodedPrefix)
           .limit(maxResults)
-          .nextToken(response[`next-token`])
-          .do();
+          .nextToken(response[`next-token`]);
+
+        if (address) {
+          response = response.address(address);
+        }
+
+        response = await response.do();
 
         if (`transactions` in response && response[`transactions`].length > 0) {
           txns.push(...response[`transactions`]);
@@ -65,8 +71,8 @@ export default async function getPackPurchaseTxns(
         }
       }
     }
-    // const user_txns = txns.filter((tx) => tx[`sender`] === address);
 
+    console.log(txns);
     return txns;
   } catch (e) {
     return [];

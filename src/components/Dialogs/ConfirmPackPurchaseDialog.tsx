@@ -155,7 +155,7 @@ const ConfirmPackPurchaseDialog = ({
           (!swapIsActiveState.loading && !swapIsActive)) && (
           <Typography variant="h6" color={`warning.main`}>
             Sorry this pack was recently purchased. The pack will be moved to
-            purchased tab within next 60 minutes.
+            purchased tab within next 30 minutes.
           </Typography>
         )}
         {hasNoBalanceForAssets && (
@@ -171,6 +171,7 @@ const ConfirmPackPurchaseDialog = ({
         {assetsToOptIn.length > 0 && (
           <LoadingButton
             color="primary"
+            disabled={hasNoBalanceForAssets}
             id={PERFORM_SWAP_OPTIN_BUTTON_ID}
             onClick={() => {
               dispatch(
@@ -186,7 +187,7 @@ const ConfirmPackPurchaseDialog = ({
         )}
         <Button
           disabled={
-            assetsToOptIn.length === 0 ||
+            assetsToOptIn.length > 0 ||
             hasZeroBalanceAssets ||
             !swapIsActive ||
             hasNoBalanceForAssets
@@ -198,7 +199,7 @@ const ConfirmPackPurchaseDialog = ({
             onConfirm();
           }}
         >
-          Proceed
+          Purchase
         </Button>
       </DialogActions>
     </Dialog>

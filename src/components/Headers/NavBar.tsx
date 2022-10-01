@@ -38,7 +38,6 @@ import {
   switchChain,
   onSessionUpdate,
   getInfluenceDepositTxns,
-  getPackPurchaseTxns,
   setGateway,
 } from '@/redux/slices/walletConnectSlice';
 import { Asset } from '@/models/Asset';
@@ -260,11 +259,6 @@ const NavBar = () => {
         getInfluenceDepositTxns({
           chain: selectedChain,
           managerAddress: CITY_MANAGER_ADDRESS,
-        }),
-      );
-      dispatch(
-        getPackPurchaseTxns({
-          chain: selectedChain,
         }),
       );
     }
@@ -525,7 +519,8 @@ const NavBar = () => {
                       id={NAV_BAR_CHAIN_SWITCH_ID}
                       label={`Network type`}
                       value={selectedChain}
-                      values={[ChainType.TestNet, ChainType.MainNet]}
+                      values={[ChainType.TestNet]}
+                      // values={[ChainType.TestNet, ChainType.MainNet]}
                       onSelect={(value: string) => {
                         dispatch(switchChain(value as ChainType));
                       }}
@@ -574,6 +569,7 @@ const NavBar = () => {
                       <Switch
                         id={NAV_BAR_CHAIN_SWITCH_ID}
                         size="small"
+                        disabled
                         checked={selectedChain === ChainType.MainNet}
                         onChange={() => {
                           const newValue =

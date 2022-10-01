@@ -48,7 +48,6 @@ interface WalletConnectState {
   fetchingInfluenceTxnNotes: boolean;
   influenceTxnNotes: InfluenceDepositNote[];
   fetchingPackPurchaseTxns: boolean;
-  packPurchaseTxnNotes: PackPurchaseNote[];
   selectedDepositAsset: AlgoWorldCityAsset | undefined;
   gateway: IpfsGateway;
 }
@@ -73,7 +72,6 @@ const initialState = {
   influenceTxnNotes: [],
   fetchingInfluenceTxnNotes: false,
   fetchingPackPurchaseTxns: false,
-  packPurchaseTxnNotes: [],
   selectedDepositAsset: undefined,
   chain: CHAIN_TYPE,
   gateway: IpfsGateway.DWEB_LINK,
@@ -112,18 +110,6 @@ export const getInfluenceDepositTxns = createAsyncThunk(
 
     const processedTxnNotes = await parseInfluenceDepositTxns(rawTxns, chain);
 
-    return processedTxnNotes;
-  },
-);
-
-export const getPackPurchaseTxns = createAsyncThunk(
-  `walletConnect/getPackPurchaseTxns`,
-  async ({ chain }: { chain: ChainType }, { getState }) => {
-    let state = getState() as any;
-    state = state.walletConnect as WalletConnectState;
-
-    const rawTxns = await lookupPackPurchaseTxns(chain, state.address);
-    const processedTxnNotes = await parsePackPurchaseTxn(rawTxns);
     return processedTxnNotes;
   },
 );
@@ -201,14 +187,6 @@ export const walletConnectSlice = createSlice({
     });
     builder.addCase(getInfluenceDepositTxns.pending, (state) => {
       state.fetchingInfluenceTxnNotes = true;
-    });
-
-    builder.addCase(getPackPurchaseTxns.fulfilled, (state, action) => {
-      state.fetchingPackPurchaseTxns = false;
-      state.packPurchaseTxnNotes = action.payload;
-    });
-    builder.addCase(getPackPurchaseTxns.pending, (state) => {
-      state.fetchingPackPurchaseTxns = true;
     });
   },
 });

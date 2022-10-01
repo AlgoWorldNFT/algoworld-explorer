@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { CITY_MANAGER_ADDRESS } from '@/common/constants';
 import { ChainType } from '@/models/Chain';
 import { indexerForChain } from '@/utils/algorand';
 
@@ -32,7 +33,8 @@ export default async function lookupPackPurchaseTxns(
 
     let response = await indexerForChain(chain)
       .searchForTransactions()
-      .address(`TSYD5NUVJZLYB3MDFZSAVCSXDDH3ZABDDUARUDAWTU7KVMNVHCH2NQOYWE`)
+      .address(CITY_MANAGER_ADDRESS)
+      .address(address)
       .txType(`pay`)
       .notePrefix(encodedPrefix)
       .limit(maxResults)
@@ -46,7 +48,8 @@ export default async function lookupPackPurchaseTxns(
       while (`next-token` in response) {
         response = await indexerForChain(chain)
           .searchForTransactions()
-          .address(`TSYD5NUVJZLYB3MDFZSAVCSXDDH3ZABDDUARUDAWTU7KVMNVHCH2NQOYWE`)
+          .address(CITY_MANAGER_ADDRESS)
+          .address(address)
           .txType(`pay`)
           .notePrefix(encodedPrefix)
           .limit(maxResults)

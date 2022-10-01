@@ -24,16 +24,20 @@ import {
   Container,
   ToggleButton,
   ToggleButtonGroup,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { MY_SWAPS_PAGE_HEADER_ID } from '@/common/constants';
 import { useState } from 'react';
 import AlgoWorldTransactionType from '@/models/AlgoWorldTransactionType';
 import InfluenceTransactionsTable from '@/components/Tables/InfluenceTransactionsTable';
-// import useLoadingIndicator from '@/redux/hooks/useLoadingIndicator';
 import PackPurchasesTable from '@/components/Tables/PackPurchasesTable';
 
 export default function MyTransactions() {
   const dispatch = useAppDispatch();
+
+  const theme = useTheme();
+  const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
 
   const address = useAppSelector((state) => state.walletConnect.address);
 
@@ -76,7 +80,7 @@ export default function MyTransactions() {
       </PageHeader>
 
       <Container
-        maxWidth="md"
+        maxWidth={largeScreen ? `md` : `xl`}
         sx={{ textAlign: `center`, pb: 15 }}
         component="main"
       >

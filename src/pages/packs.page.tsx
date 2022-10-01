@@ -49,6 +49,7 @@ import PackPurchasesTable from '@/components/Tables/PackPurchasesTable';
 
 const Packs = () => {
   const theme = useTheme();
+  const packPurchaseFee = 0.017;
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
   const { chain, gateway, address } = useAppSelector(
     (state) => state.walletConnect,
@@ -133,7 +134,7 @@ const Packs = () => {
       return;
     }
 
-    enqueueSnackbar(`Swap performed successfully...`, {
+    enqueueSnackbar(`City Pack purchased successfully...`, {
       variant: `success`,
       action: () => <ViewOnAlgoExplorerButton chain={chain} txId={txId} />,
     });
@@ -172,8 +173,8 @@ const Packs = () => {
       <Container
         sx={{
           pb: 15,
-          pl: largeScreen ? 15 : 5,
-          pr: largeScreen ? 15 : 5,
+          pl: largeScreen ? 15 : 0,
+          pr: largeScreen ? 15 : 0,
           pt: 2,
         }}
         maxWidth="md"
@@ -219,7 +220,7 @@ const Packs = () => {
           onConfirm={async () => {
             await handlePerformSwap();
           }}
-          transactionsFee={0.017}
+          transactionsFee={packPurchaseFee}
         >
           {`Proceeding with purchase will perform transaction to send five random AlgoWorld City cards from packs's escrow to your wallet and will transfer requested asset to creator of the swap within a single atomic group. Thank you for supporting further development and improvements AlgoWorld ecosystem ❤️`}
         </ConfirmPackPurchaseDialog>
@@ -227,7 +228,7 @@ const Packs = () => {
 
       {selectedPack && (
         <InfoDialog
-          title="Successfully performed swap"
+          title="Successfully purchased City Pack"
           open={shareSwapDialogOpen}
           setOpen={setShareSwapDialogOpen}
           onClose={() => {
