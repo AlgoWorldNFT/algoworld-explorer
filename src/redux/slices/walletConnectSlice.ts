@@ -34,9 +34,6 @@ import { AlgoWorldCityAsset } from '@/models/AlgoWorldAsset';
 import lookupInfluenceDepositTxns from '@/utils/transactions/lookupInfluenceDepositTxns';
 import parseInfluenceDepositTxns from '@/utils/transactions/parseInfluenceDepositTxns';
 import { InfluenceDepositNote } from '@/models/InfluenceDepositNote';
-import lookupPackPurchaseTxns from '@/utils/transactions/lookupPackPurchaseTxns';
-import parsePackPurchaseTxn from '@/utils/transactions/parsePackPurchaseTxn';
-import { PackPurchaseNote } from '@/models/PackPurchaseNote';
 import { IpfsGateway } from '@/models/Gateway';
 
 interface WalletConnectState {
