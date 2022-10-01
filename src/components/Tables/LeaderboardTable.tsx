@@ -125,7 +125,7 @@ type Props = {
 const LeaderboardTable = ({
   cities,
   onSelectDepositAsset,
-  width = 400,
+  width = 1000,
   customNoRowsOverlay,
 }: Props) => {
   const theme = useTheme();

@@ -65,7 +65,7 @@ const Gallery = () => {
 
   const [searchValue, setSearchValue] = useState(``);
   const [page, setPage] = useState(0);
-  const rowsPerPage = 20;
+  const rowsPerPage = 8;
 
   useMemo(() => {
     if (searchValue.length > 0) {

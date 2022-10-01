@@ -229,7 +229,6 @@ const InfluenceTransactionsTable = () => {
   return (
     <Box
       sx={{
-        width: 1,
         '& .super-app-theme--header': {
           backgroundColor: `background.paper`,
           color: `secondary.main`,

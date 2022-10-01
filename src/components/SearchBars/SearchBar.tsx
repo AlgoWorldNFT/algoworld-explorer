@@ -17,6 +17,7 @@
  */
 
 import { IconButton, InputBase, Paper } from '@mui/material';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -27,13 +28,18 @@ type Props = {
 };
 
 const SearchBar = ({ value, onValueChange, placeholder }: Props) => {
+  const theme = useTheme();
+  const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
+
   return (
     <Paper
       component="form"
+      elevation={3}
       sx={{
-        width: `90%`,
+        width: largeScreen ? `90%` : `100%`,
         display: `flex`,
         alignItems: `center`,
+        bgcolor: `background.default`,
       }}
     >
       <InputBase

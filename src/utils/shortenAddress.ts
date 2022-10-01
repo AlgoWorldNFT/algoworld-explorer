@@ -1,4 +1,4 @@
-const shortenAddress = (address = ``, width = 6): string => {
+const shortenAddress = (address = ``, width = 3): string => {
   return `${address.slice(0, width)}...${address.slice(-width)}`;
 };
 

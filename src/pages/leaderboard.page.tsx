@@ -16,7 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Button, Container, Grow, Stack } from '@mui/material';
+import {
+  Button,
+  Container,
+  Grow,
+  Stack,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import PageHeader from '@/components/Headers/PageHeader';
 
 import { useMemo } from 'react';
@@ -52,6 +59,9 @@ const Leaderboard = () => {
     (state) => state.walletConnect,
   );
   const router = useRouter();
+  const theme = useTheme();
+  const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
+  const screenOffset = largeScreen ? 5 : 0;
 
   const citiesUrl = useMemo(() => {
     return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/feat/testnet/data/${chain.toLowerCase()}/cities/database.json`;
@@ -170,7 +180,10 @@ const Leaderboard = () => {
         description="Discover top AlgoWorld cities by influence (updated every hour)"
       />
 
-      <Container component="main" sx={{ pb: 15 }}>
+      <Container
+        component="main"
+        sx={{ pb: 15, pr: screenOffset, pl: screenOffset }}
+      >
         {cities.length > 3 && (
           <Grow in {...{ timeout: 1000 }}>
             <Stack direction={`row`} justifyContent={`space-evenly`}>
@@ -198,6 +211,8 @@ const Leaderboard = () => {
           sx={{
             pt: 3,
             width: `100%`,
+            pr: screenOffset,
+            pl: screenOffset,
             display: `flex`,
             alignItems: `center`,
           }}

@@ -33,9 +33,6 @@ const getColumns = (chain: ChainType) => {
       field: `packId`,
       flex: 1,
       headerName: `Pack Title`,
-      width: 100,
-      minWidth: 100,
-      maxWidth: 250,
       headerAlign: `center`,
       headerClassName: `super-app-theme--header`,
       align: `center`,
@@ -48,9 +45,6 @@ const getColumns = (chain: ChainType) => {
       field: `txId`,
       flex: 1,
       headerName: `Transaction ID`,
-      width: 200,
-      minWidth: 150,
-      maxWidth: 250,
       headerAlign: `center`,
       headerClassName: `super-app-theme--header`,
       align: `center`,
@@ -67,9 +61,6 @@ const getColumns = (chain: ChainType) => {
       field: `buyerAddress`,
       flex: 1,
       headerName: `Buyer Address`,
-      width: 200,
-      minWidth: 150,
-      maxWidth: 250,
       headerAlign: `center`,
       headerClassName: `super-app-theme--header`,
       align: `center`,
@@ -85,9 +76,6 @@ const getColumns = (chain: ChainType) => {
     {
       field: `action`,
       flex: 1,
-      width: 100,
-      minWidth: 80,
-      maxWidth: 150,
       headerName: `AlgoExplorer`,
       sortable: false,
       headerAlign: `center`,
@@ -113,7 +101,6 @@ type Props = {
 const PackPurchasesTable = ({ address }: Props) => {
   const chain = useAppSelector((state) => state.walletConnect.chain);
 
-  // Implement useAsync paginated hook for fetching algorand indexer data
   const loadPacksState = useAsync(async () => {
     const txns = await getPackPurchaseTxns(chain, address);
     return parsePackPurchaseTxn(txns);
