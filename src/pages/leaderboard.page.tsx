@@ -152,7 +152,7 @@ const Leaderboard = () => {
     }
 
     enqueueSnackbar(
-      `Deposit of AWT for asset ${assetIndex} was performed. Please refer to My Transactions page to see your pending transactions. Manager wallet will update the ARC 69 tags within 60 minutes to reflect your deposit, please wait...`,
+      `Deposit of AWT for asset ${assetIndex} was performed. Please refer to My Transactions page to see your pending transactions. Manager wallet will update the ARC 69 tags within 30 minutes to reflect your deposit, please wait...`,
       {
         variant: `success`,
         action: () => (
