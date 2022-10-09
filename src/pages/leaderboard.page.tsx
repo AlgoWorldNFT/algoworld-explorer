@@ -64,7 +64,7 @@ const Leaderboard = () => {
   const screenOffset = largeScreen ? 5 : 0;
 
   const citiesUrl = useMemo(() => {
-    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/feat/testnet/data/${chain.toLowerCase()}/cities/database.json`;
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/cities/database.json`;
   }, [chain]);
 
   const citiesResponse = useSWR(citiesUrl, (url: string) => {

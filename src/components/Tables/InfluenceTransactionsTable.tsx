@@ -155,7 +155,7 @@ const InfluenceTransactionsTable = () => {
     (state) => state.walletConnect.influenceTxnNotes,
   );
   const processedInfluencesUrl = React.useMemo(() => {
-    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/feat/testnet/data/${chain.toLowerCase()}/cities/influence/processed_notes.json`;
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/cities/influence/processed_notes.json`;
   }, [chain]);
 
   const processedInfluencesResponse = useSWR(

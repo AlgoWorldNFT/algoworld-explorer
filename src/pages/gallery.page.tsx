@@ -46,7 +46,7 @@ const Gallery = () => {
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
 
   const assetsUrl = useMemo(() => {
-    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/feat/testnet/data/${chain.toLowerCase()}/${cardType.toLowerCase()}/database.json`;
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/${cardType.toLowerCase()}/database.json`;
   }, [chain, cardType]);
 
   const assetsResponse = useSWR(assetsUrl, (url: string) => {

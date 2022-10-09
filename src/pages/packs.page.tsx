@@ -62,7 +62,7 @@ const Packs = () => {
     useState<boolean>(false);
 
   const packsUrl = useMemo(() => {
-    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/feat/testnet/data/${chain.toLowerCase()}/cities/packs/${
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/cities/packs/${
       cityPackType === CityPackType.Available ? `available` : `purchased`
     }.json`;
   }, [chain, cityPackType]);
