@@ -86,6 +86,18 @@ const createColumns = (
       minWidth: 50,
       maxWidth: 500,
       headerAlign: `center`,
+      renderCell: (params: GridRenderCellParams<string>) => {
+        const value = params.value ?? `N/A`;
+        return (
+          <Tooltip enterTouchDelay={0} title={<span>{value}</span>}>
+            <div>
+              {value.includes(`AlgoWorld `)
+                ? value.split(`AlgoWorld `)[1]
+                : value}
+            </div>
+          </Tooltip>
+        );
+      },
       headerClassName: `super-app-theme--header`,
       align: `center`,
     },
