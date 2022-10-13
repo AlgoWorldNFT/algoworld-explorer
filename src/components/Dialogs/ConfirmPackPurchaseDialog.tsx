@@ -155,7 +155,7 @@ const ConfirmPackPurchaseDialog = ({
           (!swapIsActiveState.loading && !swapIsActive)) && (
           <Typography variant="h6" color={`warning.main`}>
             Sorry this pack was recently purchased. The pack will be moved to
-            purchased tab within next 30 minutes.
+            purchased tab within next 60 minutes.
           </Typography>
         )}
         {hasNoBalanceForAssets && (

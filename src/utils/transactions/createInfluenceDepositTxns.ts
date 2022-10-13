@@ -45,7 +45,7 @@ export default async function createInfluenceDepositTxns(
       amount: fundingFee,
       note: new Uint8Array(
         Buffer.from(
-          `I am a fee transaction for covering a fee that will be spend by manager wallet to update ARC69 tag within next 30 minutes :-)`,
+          `I am a fee transaction for covering a fee that will be spend by manager wallet to update ARC69 tag within next 60 minutes :-)`,
         ),
       ),
       suggestedParams,

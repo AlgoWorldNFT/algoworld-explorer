@@ -89,7 +89,7 @@ export const DepositInfluenceDialog = ({
           >
             {`By pressing Deposit, you are going to deposit city influence in AWT
             tokens for ${depositAsset.name} (${depositAsset.index}).
-            Please note that it will take up to 30 minutes until ARC69 tag is
+            Please note that it will take up to 60 minutes until ARC69 tag is
             updated by the manager wallet after deposit is performed.`}
           </DialogContentText>
           {` `}
