@@ -27,6 +27,7 @@ const moduleExports = {
       'algoworld-nft.com',
       'glitchtip.com',
       'ipfs.io',
+      'ipfs.algonode.xyz',
       'jsonkeeper.com',
     ],
   },

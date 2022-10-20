@@ -529,6 +529,7 @@ const NavBar = () => {
                       label={`IPFS Gateway`}
                       value={gateway}
                       values={[
+                        IpfsGateway.ALGONODE_IO,
                         IpfsGateway.DWEB_LINK,
                         IpfsGateway.IPFS_IO,
                         IpfsGateway.CLOUDFLARE_IPFS,

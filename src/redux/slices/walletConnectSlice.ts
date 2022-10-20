@@ -61,7 +61,7 @@ const initialState = {
       decimals: 6,
       offeringAmount: 0,
       requestingAmount: 0,
-      imageUrl: EMPTY_ASSET_IMAGE_URL(IpfsGateway.DWEB_LINK),
+      imageUrl: EMPTY_ASSET_IMAGE_URL(IpfsGateway.ALGONODE_IO),
       name: `Algo`,
       unitName: `Algo`,
     },
@@ -71,7 +71,7 @@ const initialState = {
   fetchingPackPurchaseTxns: false,
   selectedDepositAsset: undefined,
   chain: CHAIN_TYPE,
-  gateway: IpfsGateway.DWEB_LINK,
+  gateway: IpfsGateway.ALGONODE_IO,
   fetchingAccountAssets: false,
 } as WalletConnectState;
 
