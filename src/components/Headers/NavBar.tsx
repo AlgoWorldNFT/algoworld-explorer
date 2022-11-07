@@ -587,7 +587,6 @@ const NavBar = () => {
                         : `TestNet`
                     }
                   />
-
                   <Button
                     id={NAV_BAR_CONNECT_BTN_ID}
                     onClick={() => {

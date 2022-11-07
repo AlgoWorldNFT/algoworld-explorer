@@ -46,6 +46,8 @@ import createPerformPackPurchaseTxns from '@/utils/transactions/createPerformPac
 import submitTransactions from '@/utils/transactions/submitTransactions';
 import ConfirmPackPurchaseDialog from '@/components/Dialogs/ConfirmPackPurchaseDialog';
 import PackPurchasesTable from '@/components/Tables/PackPurchasesTable';
+import { SITE_IS_UNDER_MAINTENANCE } from '@/common/constants';
+import MaintenanceLayout from '@/components/Layouts/MaintenanceLayout';
 
 const Packs = () => {
   const theme = useTheme();
@@ -148,7 +150,9 @@ const Packs = () => {
     setConfirmSwapDialogOpen(true);
   };
 
-  return (
+  return SITE_IS_UNDER_MAINTENANCE ? (
+    <MaintenanceLayout />
+  ) : (
     <>
       <PageHeader
         title="🎲 City packs"

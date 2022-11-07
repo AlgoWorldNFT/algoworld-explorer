@@ -42,6 +42,7 @@ import {
   AWT_ASSET_ID,
   CITY_MANAGER_ADDRESS,
   EMPTY_ASSET_IMAGE_URL,
+  SITE_IS_UNDER_MAINTENANCE,
   TXN_SUBMISSION_FAILED_MESSAGE,
 } from '@/common/constants';
 import { connector } from '@/redux/store/connector';
@@ -53,6 +54,7 @@ import useLoadingIndicator from '@/redux/hooks/useLoadingIndicator';
 import ViewOnAlgoExplorerButton from '@/components/Buttons/ViewOnAlgoExplorerButton';
 import { toIpfsProxyUrl } from '@/utils/toIpfsProxyUrl';
 import { useRouter } from 'next/router';
+import MaintenanceLayout from '@/components/Layouts/MaintenanceLayout';
 
 const Leaderboard = () => {
   const { chain, gateway, address, selectedDepositAsset } = useAppSelector(
@@ -173,7 +175,9 @@ const Leaderboard = () => {
     resetLoading();
   };
 
-  return (
+  return SITE_IS_UNDER_MAINTENANCE ? (
+    <MaintenanceLayout />
+  ) : (
     <div>
       <PageHeader
         title="📃 City Rank Leaderboard"
