@@ -45,8 +45,8 @@ export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   const layout = () => {
-    const isMaintenance = process.env.NEXT_MAINTENANCE_STATUS === `true`;
-    return isMaintenance ? (
+    const isUnderMaintenance = Boolean(process.env.NEXT_IS_UNDER_MAINTENANCE);
+    return isUnderMaintenance ? (
       <MaintenanceLayout title="AlgoWorld Explorer" />
     ) : (
       <Layout title="AlgoWorld Explorer">
