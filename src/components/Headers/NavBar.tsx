@@ -112,11 +112,7 @@ const settings: MenuBarSettingItem[] = [
 ];
 const BUG_REPORT_URL = `https://github.com/AlgoWorldNFT/algoworld-explorer/issues/new`;
 
-type Props = {
-  isMaintenance?: boolean;
-};
-
-const NavBar = ({ isMaintenance }: Props) => {
+const NavBar = () => {
   const theme = useTheme();
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
 
@@ -591,17 +587,15 @@ const NavBar = ({ isMaintenance }: Props) => {
                         : `TestNet`
                     }
                   />
-                  {!isMaintenance && (
-                    <Button
-                      id={NAV_BAR_CONNECT_BTN_ID}
-                      onClick={() => {
-                        dispatch(setIsWalletPopupOpen(true));
-                      }}
-                      title="Connect Wallet"
-                    >
-                      Connect Wallet
-                    </Button>
-                  )}
+                  <Button
+                    id={NAV_BAR_CONNECT_BTN_ID}
+                    onClick={() => {
+                      dispatch(setIsWalletPopupOpen(true));
+                    }}
+                    title="Connect Wallet"
+                  >
+                    Connect Wallet
+                  </Button>
                 </Stack>
               )}
             </Box>
