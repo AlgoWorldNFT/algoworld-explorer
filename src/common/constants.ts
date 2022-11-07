@@ -24,6 +24,9 @@ export const CHAIN_TYPE: ChainType =
     ? ChainType.TestNet
     : ChainType.MainNet;
 
+export const SITE_IS_UNDER_MAINTENANCE =
+  process.env.NEXT_PUBLIC_UNDER_MAINTENANCE === `true`;
+
 export const ALGOEXPLORER_API_URL = (chain: ChainType) => {
   return chain.toLowerCase() === `mainnet`
     ? `https://node.algoexplorerapi.io`

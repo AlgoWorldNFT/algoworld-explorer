@@ -16,72 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { ReactNode } from 'react';
-import Head from 'next/head';
-import NavBar from '../Headers/NavBar';
-import ParticlesContainer from '../Misc/ParticlesContainer';
-import Footer from '../Footers/Footer';
-import { Box, Stack, Typography } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
-import LoadingBackdrop from '../Backdrops/Backdrop';
-import AboutDialog from '../Dialogs/AboutDialog';
-import { setIsAboutPopupOpen } from '@/redux/slices/applicationSlice';
+import React from 'react';
+import { Stack, Typography } from '@mui/material';
 
-type Props = {
-  title?: string;
-};
-
-const MaintenanceLayout = ({ title = `This is the default title` }: Props) => {
-  const loadingIndicator = useAppSelector(
-    (state) => state.application.loadingIndicator,
-  );
-  const dispatch = useAppDispatch();
-
-  const isAboutPopupOpen = useAppSelector(
-    (state) => state.application.isAboutPopupOpen,
-  );
-
+const MaintenanceLayout = () => {
   return (
-    <Box
-      sx={{
-        display: `flex`,
-        flexDirection: `column`,
-        minHeight: `100vh`,
-      }}
-    >
-      <AboutDialog
-        open={isAboutPopupOpen}
-        changeState={(state) => {
-          dispatch(setIsAboutPopupOpen(state));
-        }}
-      />
-      <Head>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-      <header>
-        <NavBar isMaintenance={true} />
-      </header>
-      <main>
-        <>
-          <LoadingBackdrop
-            isLoading={loadingIndicator.isLoading}
-            message={loadingIndicator.message}
-          />
-          <ParticlesContainer />
-          <Stack alignItems="center" direction="column" sx={{ pt: 20 }}>
-            <Typography variant="h3" component="h2">
-              ⚠️ Maintenance
-            </Typography>
-            <Typography variant="h4" component="h2">
-              Check back later...
-            </Typography>
-          </Stack>
-        </>
-      </main>
-      <Footer />
-    </Box>
+    <Stack alignItems="center" direction="column" sx={{ pt: 20 }}>
+      <Typography variant="h4" component="h2">
+        ⚠️ Maintenance ⚠️
+      </Typography>
+      <Typography variant="h5" component="h2">
+        Please, check back later...
+      </Typography>
+    </Stack>
   );
 };
 export default MaintenanceLayout;

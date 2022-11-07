@@ -32,7 +32,6 @@ import store from '@/redux/store';
 import { ConnectContext, connector } from '@/redux/store/connector';
 import { Slide } from '@mui/material';
 import { GoogleAnalytics } from 'nextjs-google-analytics';
-import MaintenanceLayout from '@/components/Layouts/MaintenanceLayout';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -43,20 +42,6 @@ interface MyAppProps extends AppProps {
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-
-  const layout = () => {
-    const isUnderMaintenance = Boolean(process.env.NEXT_IS_UNDER_MAINTENANCE);
-    return isUnderMaintenance ? (
-      <MaintenanceLayout title="AlgoWorld Explorer" />
-    ) : (
-      <Layout title="AlgoWorld Explorer">
-        <>
-          <GoogleAnalytics />
-          <Component {...pageProps} />
-        </>
-      </Layout>
-    );
-  };
 
   return (
     <CacheProvider value={emotionCache}>
@@ -93,7 +78,12 @@ export default function MyApp(props: MyAppProps) {
               TransitionComponent={Slide}
             >
               <CssBaseline />
-              {layout()}
+              <Layout title="AlgoWorld Explorer">
+                <>
+                  <GoogleAnalytics />
+                  <Component {...pageProps} />
+                </>
+              </Layout>
             </SnackbarProvider>
           </ThemeProvider>
         </ConnectContext.Provider>
