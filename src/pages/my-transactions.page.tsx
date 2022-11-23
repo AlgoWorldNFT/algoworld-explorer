@@ -59,24 +59,26 @@ export default function MyTransactions() {
         title="📜 My Transactions"
         description="Monitor and manage your transactions performed on AlgoWorldExplorer"
       >
-        <ToggleButtonGroup
-          color="primary"
-          value={transactionType}
-          sx={{
-            pt: 2,
-            justifyContent: `center`,
-            width: `100%`,
-          }}
-          exclusive
-          onChange={handleChange}
-        >
-          <ToggleButton value={AlgoWorldTransactionType.InfluenceDeposit}>
-            Influence deposits
-          </ToggleButton>
-          <ToggleButton value={AlgoWorldTransactionType.PackPurchase}>
-            Pack purchases
-          </ToggleButton>
-        </ToggleButtonGroup>
+        {address && (
+          <ToggleButtonGroup
+            color="primary"
+            value={transactionType}
+            sx={{
+              pt: 2,
+              justifyContent: `center`,
+              width: `100%`,
+            }}
+            exclusive
+            onChange={handleChange}
+          >
+            <ToggleButton value={AlgoWorldTransactionType.InfluenceDeposit}>
+              Influence deposits
+            </ToggleButton>
+            <ToggleButton value={AlgoWorldTransactionType.PackPurchase}>
+              Pack purchases
+            </ToggleButton>
+          </ToggleButtonGroup>
+        )}
       </PageHeader>
 
       <Container

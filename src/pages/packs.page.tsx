@@ -177,8 +177,18 @@ const Packs = () => {
       <Container
         sx={{
           pb: 15,
-          pl: largeScreen ? 15 : 0,
-          pr: largeScreen ? 15 : 0,
+          pl:
+            cityPackType === CityPackType.Available
+              ? largeScreen
+                ? 15
+                : 5
+              : 0,
+          pr:
+            cityPackType === CityPackType.Available
+              ? largeScreen
+                ? 15
+                : 5
+              : 0,
           pt: 2,
         }}
         maxWidth="md"
@@ -189,7 +199,7 @@ const Packs = () => {
             <Grid container spacing={3}>
               {packs.map((pack) => (
                 <Grow key={pack.id} in {...{ timeout: 1000 }}>
-                  <Grid item xs={12} sm={6} md={4}>
+                  <Grid item xs={6} sm={6} md={4}>
                     <PackCard
                       pack={pack}
                       purchaseClicked={handleOnPackPurchase}
