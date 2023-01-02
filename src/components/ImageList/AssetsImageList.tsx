@@ -78,9 +78,13 @@ const AssetsImageList = ({ assets }: Props) => {
                 shimmer(700, 475),
               )}`}
               placeholder="blur"
-              width={`140px`}
-              objectFit="contain"
-              height={`400px`}
+              style={{
+                maxWidth: '100%',
+                minHeight: '475px',
+                height: 'auto',
+              }}
+              width={700}
+              height={475}
               alt={`AlgoWorld Card`}
             />
             <ImageListItemBar

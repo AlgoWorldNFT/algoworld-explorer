@@ -273,7 +273,7 @@ const NavBar = () => {
       <AppBar sx={{ background: `#000000` }} id={NAV_BAR_ID} position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Link href="/gallery">
+            <Link legacyBehavior href="/gallery">
               <IconButton
                 id={NAV_BAR_ICON_HOME_BTN_ID}
                 size="medium"
@@ -329,6 +329,7 @@ const NavBar = () => {
               >
                 {pages.map((page) => (
                   <Link
+                    legacyBehavior
                     id={NAV_BAR_MENU_APPBAR_ITEM_ID(page.title)}
                     key={page.title}
                     href={page.url}
@@ -369,6 +370,7 @@ const NavBar = () => {
             <Box sx={{ flexGrow: 1, display: { xs: `none`, md: `flex` } }}>
               {pages.map((page) => (
                 <Link
+                  legacyBehavior
                   id={NAV_BAR_MENU_APPBAR_ITEM_ID(page.title)}
                   key={page.title}
                   href={page.url}

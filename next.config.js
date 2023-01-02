@@ -17,6 +17,8 @@ const moduleExports = {
   },
   images: {
     domains: [
+      '*.nf.domains',
+      'images.nf.domains',
       'cf-ipfs.com',
       'dweb.link',
       'cloudflare-ipfs.com',

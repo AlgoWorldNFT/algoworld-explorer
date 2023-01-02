@@ -202,9 +202,11 @@ const Leaderboard = () => {
                     loading="lazy"
                     blurDataURL={EMPTY_ASSET_IMAGE_URL(gateway)}
                     placeholder="blur"
-                    width={`${250 - index * 10}px`}
-                    objectFit="contain"
-                    height={`500px`}
+                    width={largeScreen ? 250 : 110}
+                    height={largeScreen ? 500 : 130}
+                    style={{
+                      height: 'auto',
+                    }}
                     alt={`AlgoWorld Card`}
                   />
                 );
