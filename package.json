@@ -58,7 +58,7 @@
     "prop-types": "15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-number-format": "4.9.4",
+    "react-number-format": "5.1.2",
     "react-redux": "8.0.5",
     "react-tsparticles": "2.7.1",
     "react-use": "17.4.0",
