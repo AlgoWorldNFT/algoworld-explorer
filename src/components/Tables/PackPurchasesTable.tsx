@@ -99,7 +99,7 @@ type Props = {
 };
 
 const PackPurchasesTable = ({ address }: Props) => {
-  const chain = useAppSelector((state) => state.walletConnect.chain);
+  const chain = useAppSelector((state) => state.application.chain);
 
   const loadPacksState = useAsync(async () => {
     const txns = await getPackPurchaseTxns(chain, address);

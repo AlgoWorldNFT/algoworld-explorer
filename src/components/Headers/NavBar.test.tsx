@@ -1,4 +1,4 @@
-import { queryByAttribute } from '@testing-library/react';
+import { act, queryByAttribute } from '@testing-library/react';
 import React from 'react';
 import {
   NAV_BAR_CHAIN_FORM_CONTROL_ID,
@@ -24,10 +24,14 @@ import renderWithProviders from '@/__utils__/renderWithProviders';
 describe(`NavBar`, () => {
   it.each([`testnet`, `mainnet`])(
     `renders correct switch when chain is %p`,
-    (chainType) => {
+    async (chainType) => {
       (useRouter as jest.Mock).mockReturnValue({ query: { chain: chainType } });
+      let dom: ReturnType<typeof renderWithProviders> = {} as any;
 
-      const dom = renderWithProviders(<NavBar />);
+      await act(async () => {
+        dom = renderWithProviders(<NavBar />);
+      });
+
       const getById = queryByAttribute.bind(null, `id`);
 
       const chainFormControlComponent = getById(

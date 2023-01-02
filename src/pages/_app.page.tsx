@@ -29,7 +29,6 @@ import createEmotionCache from '../utils/createEmotionCache';
 import { SnackbarProvider } from 'notistack';
 import Layout from '@/components/Layouts/Layout';
 import store from '@/redux/store';
-import { ConnectContext, connector } from '@/redux/store/connector';
 import { Slide } from '@mui/material';
 import { GoogleAnalytics } from 'nextjs-google-analytics';
 
@@ -42,6 +41,7 @@ interface MyAppProps extends AppProps {
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
@@ -66,26 +66,24 @@ export default function MyApp(props: MyAppProps) {
       </Head>
 
       <Provider store={store}>
-        <ConnectContext.Provider value={connector}>
-          <ThemeProvider theme={darkTheme}>
-            <SnackbarProvider
-              maxSnack={3}
-              anchorOrigin={{
-                vertical: `bottom`,
-                horizontal: `center`,
-              }}
-              TransitionComponent={Slide}
-            >
-              <CssBaseline />
-              <Layout title="AlgoWorld Explorer">
-                <>
-                  <GoogleAnalytics />
-                  <Component {...pageProps} />
-                </>
-              </Layout>
-            </SnackbarProvider>
-          </ThemeProvider>
-        </ConnectContext.Provider>
+        <ThemeProvider theme={darkTheme}>
+          <SnackbarProvider
+            maxSnack={3}
+            anchorOrigin={{
+              vertical: `bottom`,
+              horizontal: `center`,
+            }}
+            TransitionComponent={Slide}
+          >
+            <CssBaseline />
+            <Layout title="AlgoWorld Explorer">
+              <>
+                <GoogleAnalytics />
+                <Component {...pageProps} />
+              </>
+            </Layout>
+          </SnackbarProvider>
+        </ThemeProvider>
       </Provider>
     </CacheProvider>
   );

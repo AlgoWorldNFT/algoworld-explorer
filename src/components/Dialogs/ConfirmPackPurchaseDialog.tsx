@@ -39,10 +39,10 @@ import {
 import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
 import { Asset } from '@/models/Asset';
 import { PERFORM_SWAP_OPTIN_BUTTON_ID } from '@/common/constants';
-import { connector } from '@/redux/store/connector';
 import getPackAssetsToOptIn from '@/utils/assets/getPackAssetsToOptIn';
 import { LoadingButton } from '@mui/lab';
-import { performOptAssets } from '@/redux/slices/walletConnectSlice';
+import { performOptAssets } from '@/redux/slices/applicationSlice';
+import { useWallet } from '@txnlab/use-wallet';
 
 type Props = {
   title: string;
@@ -63,12 +63,13 @@ const ConfirmPackPurchaseDialog = ({
   onConfirm,
   transactionsFee,
 }: Props) => {
+  const { activeAddress: address, signTransactions } = useWallet();
+
   const {
     chain,
-    address,
     assets: existingAssets,
     gateway,
-  } = useAppSelector((state) => state.walletConnect);
+  } = useAppSelector((state) => state.application);
 
   const dispatch = useAppDispatch();
 
@@ -168,23 +169,30 @@ const ConfirmPackPurchaseDialog = ({
         <Button id={DIALOG_CANCEL_BTN_ID} onClick={() => setOpen(false)}>
           Cancel
         </Button>
-        {assetsToOptIn.length > 0 && (
-          <LoadingButton
-            color="primary"
-            disabled={hasNoBalanceForAssets}
-            id={PERFORM_SWAP_OPTIN_BUTTON_ID}
-            onClick={() => {
-              dispatch(
-                performOptAssets({
-                  assetIndexes: assetsToOptIn,
-                  connector,
-                }),
-              );
-            }}
-          >
-            Opt-In
-          </LoadingButton>
-        )}
+        {assetsToOptIn.length > 0 &&
+          !(
+            hasZeroBalanceAssets ||
+            (!swapIsActiveState.loading && !swapIsActive)
+          ) && (
+            <LoadingButton
+              color="primary"
+              disabled={hasNoBalanceForAssets}
+              id={PERFORM_SWAP_OPTIN_BUTTON_ID}
+              onClick={() => {
+                dispatch(
+                  performOptAssets({
+                    assetIndexes: assetsToOptIn,
+                    gateway,
+                    chain,
+                    activeAddress: address as string,
+                    signTransactions,
+                  }),
+                );
+              }}
+            >
+              Opt-In
+            </LoadingButton>
+          )}
         <Button
           disabled={
             assetsToOptIn.length > 0 ||

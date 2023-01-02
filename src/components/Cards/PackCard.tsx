@@ -26,6 +26,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
 import { stringToHexColor } from '@/utils/stringToHexColor';
 import { setIsWalletPopupOpen } from '@/redux/slices/applicationSlice';
 import { CITY_PACK_IMAGE_URL } from '@/common/constants';
+import { useWallet } from '@txnlab/use-wallet';
 
 type Props = {
   pack: CityPack;
@@ -33,7 +34,9 @@ type Props = {
 };
 
 const PackCard = ({ pack, purchaseClicked }: Props) => {
-  const { address, gateway } = useAppSelector((state) => state.walletConnect);
+  const { activeAddress: address } = useWallet();
+
+  const { gateway } = useAppSelector((state) => state.application);
   const dispatch = useAppDispatch();
 
   return (

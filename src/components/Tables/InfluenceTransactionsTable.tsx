@@ -150,9 +150,9 @@ const getColumns = (chain: ChainType) => {
 };
 
 const InfluenceTransactionsTable = () => {
-  const chain = useAppSelector((state) => state.walletConnect.chain);
+  const chain = useAppSelector((state) => state.application.chain);
   const influenceTxnNotes = useAppSelector(
-    (state) => state.walletConnect.influenceTxnNotes,
+    (state) => state.application.influenceTxnNotes,
   );
   const processedInfluencesUrl = React.useMemo(() => {
     return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/cities/influence/processed_notes.json`;
