@@ -31,6 +31,7 @@
     ]
   },
   "dependencies": {
+    "@blockshake/defly-connect": "1.0.0",
     "@emotion/cache": "11.10.5",
     "@emotion/react": "11.10.5",
     "@emotion/server": "11.10.0",
@@ -42,11 +43,13 @@
     "@mui/lab": "5.0.0-alpha.110",
     "@mui/material": "5.10.16",
     "@mui/x-data-grid": "5.17.13",
+    "@perawallet/connect": "1.0.7",
     "@randlabs/myalgo-connect": "1.4.2",
     "@reduxjs/toolkit": "1.9.1",
+    "@txnlab/use-wallet": "1.0.5",
     "@walletconnect/client": "1.8.0",
     "algorand-walletconnect-qrcode-modal": "1.8.0",
-    "algosdk": "1.23.2",
+    "algosdk": "1.24.1",
     "axios": "0.27.2",
     "next": "12.3.4",
     "next-pwa": "5.6.0",

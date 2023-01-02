@@ -24,29 +24,24 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
-import AccountBalanceWalletOutlined from '@mui/icons-material/AccountBalanceWalletOutlined';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Image from 'next/image';
-import { useCallback, useContext, useEffect } from 'react';
-import { ConnectContext } from '@/redux/store/connector';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
 import {
   getAccountAssets,
   selectAssets,
   switchChain,
-  onSessionUpdate,
   getInfluenceDepositTxns,
   setGateway,
-} from '@/redux/slices/walletConnectSlice';
+} from '@/redux/slices/applicationSlice';
 import { Asset } from '@/models/Asset';
-import ConnectWalletDialog from '../Dialogs/ConnectWalletDialog';
 import {
   setIsAboutPopupOpen,
   setIsWalletPopupOpen,
 } from '@/redux/slices/applicationSlice';
-import { WalletClient, WalletType } from '@/models/Wallet';
 import { useRouter } from 'next/router';
 import {
   Divider,
@@ -61,10 +56,7 @@ import {
 } from '@mui/material';
 import { ChainType } from '@/models/Chain';
 import Link from 'next/link';
-import {
-  CITY_MANAGER_ADDRESS,
-  CONNECTED_WALLET_TYPE,
-} from '@/common/constants';
+import { CITY_MANAGER_ADDRESS } from '@/common/constants';
 import createAlgoExplorerUrl from '@/utils/createAlgoExplorerUrl';
 import formatBigNumWithDecimals from '@/utils/formatBigNumWithDecimals';
 import AlgoExplorerUrlType from '@/models/AlgoExplorerUrlType';
@@ -85,6 +77,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ValueSelect from '../Select/ValueSelect';
 import { IpfsGateway } from '@/models/Gateway';
+import ConnectProviderDialog from '../Dialogs/ConnectProviderDialog';
+import getNFDsForAddress from '@/utils/accounts/getNFDsForAddress';
+import { useAsync } from 'react-use';
+import { useWallet } from '@txnlab/use-wallet';
+import { ellipseText, ellipseAddress } from '@/redux/helpers/utilities';
 
 type PageConfiguration = {
   title: string;
@@ -132,46 +129,44 @@ const NavBar = () => {
   const {
     fetchingAccountAssets: loading,
     chain: selectedChain,
-    address,
     gateway,
-  } = useAppSelector((state) => state.walletConnect);
+  } = useAppSelector((state) => state.application);
 
   const { isWalletPopupOpen, isAboutPopupOpen } = useAppSelector(
     (state) => state.application,
   );
 
+  const { providers, activeAddress } = useWallet();
+
+  const activeProvider = React.useMemo(() => {
+    return providers?.find((p) => p.isActive);
+  }, [providers]);
+
+  const nfdState = useAsync(async () => {
+    if (!activeAddress) {
+      return;
+    }
+    const nfd = await getNFDsForAddress(activeAddress, selectedChain);
+    return nfd;
+  }, [activeAddress, selectedChain]);
+
+  const nfd = React.useMemo(() => {
+    if (nfdState.loading || nfdState.error) {
+      return null;
+    }
+
+    return nfdState.value;
+  }, [nfdState.error, nfdState.loading, nfdState.value]);
+
+  const nfdAvatar = React.useMemo(() => {
+    return nfd?.properties?.userDefined?.avatar;
+  }, [nfd]);
+
   const dispatch = useAppDispatch();
 
-  const connector = useContext(ConnectContext);
-
-  const connect = useCallback(
-    async (
-      clientType: WalletType,
-      fromClickEvent: boolean,
-      phrase?: string,
-    ) => {
-      // MyAlgo Connect doesn't work if invoked outside of click event
-      // Hence this work around
-      if (!fromClickEvent && clientType === WalletType.MyAlgoWallet) {
-        return;
-      }
-
-      if (connector.connected) {
-        const accounts = connector.accounts();
-        accounts.length > 0
-          ? dispatch(onSessionUpdate(accounts))
-          : await connector.connect();
-      } else {
-        connector.setWalletClient(clientType, phrase);
-        await connector.connect();
-      }
-    },
-    [connector, dispatch],
-  );
-
   const disconnect = async () => {
-    await connector
-      .disconnect()
+    await activeProvider
+      ?.disconnect()
       .catch((err: { message: any }) => console.error(err.message));
   };
 
@@ -198,11 +193,11 @@ const NavBar = () => {
       return;
     }
 
-    if (event.target.textContent === `AlgoExplorer`) {
+    if (event.target.textContent === `AlgoExplorer` && activeAddress) {
       window.open(
         createAlgoExplorerUrl(
           selectedChain,
-          address,
+          activeAddress,
           AlgoExplorerUrlType.Address,
         ),
         `_blank`,
@@ -246,35 +241,27 @@ const NavBar = () => {
       }
     }
 
-    const connectedWalletType = localStorage.getItem(CONNECTED_WALLET_TYPE);
-    if (!connectedWalletType || connectedWalletType === ``) {
-      return;
-    } else {
-      connect(connectedWalletType as WalletType, false);
-    }
-
-    if (address) {
-      dispatch(getAccountAssets({ chain: selectedChain, address, gateway }));
+    if (activeAddress) {
+      dispatch(
+        getAccountAssets({
+          chain: selectedChain,
+          address: activeAddress,
+          gateway,
+        }),
+      );
       dispatch(
         getInfluenceDepositTxns({
           chain: selectedChain,
+          address: activeAddress,
           managerAddress: CITY_MANAGER_ADDRESS,
         }),
       );
     }
-  }, [dispatch, connector, address, selectedChain, chain, connect, gateway]);
+  }, [dispatch, activeAddress, selectedChain, chain, gateway]);
 
   const nativeCurrency = assets.find(
     (asset: Asset) => asset.index === 0,
   ) as Asset;
-
-  const handleOnClientSelected = async (
-    client: WalletClient,
-    phrase?: string,
-  ) => {
-    dispatch(setIsWalletPopupOpen(false));
-    await connect(client.type, true, phrase);
-  };
 
   const openBugReport = () => {
     window.open(BUG_REPORT_URL, `_blank`);
@@ -282,10 +269,7 @@ const NavBar = () => {
 
   return (
     <>
-      <ConnectWalletDialog
-        open={isWalletPopupOpen}
-        onClientSelected={handleOnClientSelected}
-      />
+      <ConnectProviderDialog open={isWalletPopupOpen} />
       <AppBar sx={{ background: `#000000` }} id={NAV_BAR_ID} position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -350,19 +334,13 @@ const NavBar = () => {
                     href={page.url}
                     passHref
                   >
-                    <a
-                      target={page.target}
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: `none`, color: `white` }}
+                    <MenuItem
+                      onClick={() => {
+                        handleCloseNavMenu();
+                      }}
                     >
-                      <MenuItem
-                        onClick={() => {
-                          handleCloseNavMenu();
-                        }}
-                      >
-                        <Typography textAlign="center">{page.title}</Typography>
-                      </MenuItem>
-                    </a>
+                      <Typography textAlign="center">{page.title}</Typography>
+                    </MenuItem>
                   </Link>
                 ))}
                 <MenuItem
@@ -396,20 +374,14 @@ const NavBar = () => {
                   href={page.url}
                   passHref
                 >
-                  <a
-                    target={page.target}
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: `none`, color: `white` }}
+                  <Button
+                    key={page.title}
+                    disabled={page.disabled}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: `white`, display: `block` }}
                   >
-                    <Button
-                      key={page.title}
-                      disabled={page.disabled}
-                      onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: `white`, display: `block` }}
-                    >
-                      {page.title}
-                    </Button>
-                  </a>
+                    {page.title}
+                  </Button>
                 </Link>
               ))}
               <Button
@@ -435,7 +407,7 @@ const NavBar = () => {
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
-              {connector.connected ? (
+              {activeAddress ? (
                 <>
                   <Grid container alignItems={`center`} spacing={1}>
                     <Grid item xs>
@@ -474,12 +446,31 @@ const NavBar = () => {
                           onClick={handleOpenUserMenu}
                           sx={{ p: 0, borderRadius: 1 }}
                         >
-                          <AccountBalanceWalletOutlined sx={{ pr: 0.5 }} />
-                          <Typography variant="h6">
-                            {`${address?.slice(0, 4)}...${address?.slice(
-                              address.length - 4,
-                              address.length,
-                            )} `}
+                          {nfd && nfdAvatar && (
+                            <div
+                              style={{
+                                borderRadius: `50%`,
+                                overflow: `hidden`,
+                                width: `40px`,
+                                height: `40px`,
+                              }}
+                            >
+                              <Image
+                                src={nfdAvatar}
+                                alt="nfd-profile"
+                                width={40}
+                                height={40}
+                                placeholder="blur"
+                                blurDataURL={nfdAvatar}
+                              />
+                            </div>
+                          )}
+                          <Typography sx={{ pl: nfd ? 1 : 0 }} variant="h6">
+                            {`${
+                              nfd
+                                ? ellipseText(nfd.name, 20)
+                                : ellipseAddress(activeAddress, 4)
+                            }`}
                           </Typography>
                         </IconButton>
                       </Tooltip>
@@ -536,6 +527,24 @@ const NavBar = () => {
                       ]}
                       onSelect={(value: string) => {
                         dispatch(setGateway(value as IpfsGateway));
+                      }}
+                    />
+                    <Divider />
+                    <ValueSelect
+                      label={`Active account`}
+                      value={ellipseAddress(activeAddress)}
+                      values={
+                        activeProvider?.accounts.map((account) => {
+                          return ellipseAddress(account.address);
+                        }) || []
+                      }
+                      rawValues={
+                        activeProvider?.accounts.map((account) => {
+                          return account.address;
+                        }) || []
+                      }
+                      onSelect={async (value: string) => {
+                        await activeProvider?.setActiveAccount(value);
                       }}
                     />
                     {settings.map((setting) => (

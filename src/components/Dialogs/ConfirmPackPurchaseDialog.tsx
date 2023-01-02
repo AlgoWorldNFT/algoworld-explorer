@@ -42,7 +42,7 @@ import { PERFORM_SWAP_OPTIN_BUTTON_ID } from '@/common/constants';
 import { connector } from '@/redux/store/connector';
 import getPackAssetsToOptIn from '@/utils/assets/getPackAssetsToOptIn';
 import { LoadingButton } from '@mui/lab';
-import { performOptAssets } from '@/redux/slices/walletConnectSlice';
+import { performOptAssets } from '@/redux/slices/applicationSlice';
 
 type Props = {
   title: string;
@@ -177,7 +177,6 @@ const ConfirmPackPurchaseDialog = ({
               dispatch(
                 performOptAssets({
                   assetIndexes: assetsToOptIn,
-                  connector,
                 }),
               );
             }}
