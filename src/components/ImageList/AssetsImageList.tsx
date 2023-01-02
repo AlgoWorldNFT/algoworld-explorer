@@ -79,9 +79,9 @@ const AssetsImageList = ({ assets }: Props) => {
               )}`}
               placeholder="blur"
               style={{
-                maxWidth: '100%',
-                minHeight: '475px',
-                height: 'auto',
+                maxWidth: `100%`,
+                minHeight: `475px`,
+                height: `auto`,
               }}
               width={700}
               height={475}

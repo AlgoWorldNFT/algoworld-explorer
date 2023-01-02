@@ -194,7 +194,7 @@ const Leaderboard = () => {
         {cities.length > 3 && (
           <Grow in {...{ timeout: 1000 }}>
             <Stack direction={`row`} justifyContent={`space-evenly`}>
-              {cities.slice(0, 3).map((city, index) => {
+              {cities.slice(0, 3).map((city) => {
                 return (
                   <Image
                     key={city.index}
@@ -205,7 +205,7 @@ const Leaderboard = () => {
                     width={largeScreen ? 250 : 110}
                     height={largeScreen ? 500 : 130}
                     style={{
-                      height: 'auto',
+                      height: `auto`,
                     }}
                     alt={`AlgoWorld Card`}
                   />
