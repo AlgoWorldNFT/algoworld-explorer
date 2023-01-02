@@ -18,7 +18,7 @@
 
 import { CoinType } from '@/models/CoinType';
 import { TextField } from '@mui/material';
-import NumberFormat, { NumberFormatValues } from 'react-number-format';
+import { NumericFormat, NumberFormatValues } from 'react-number-format';
 import { CRYPTO_TEXT_FIELD_ID } from './constants';
 
 type Props = {
@@ -43,7 +43,7 @@ const CryptoTextField = ({
   sx,
 }: Props) => {
   return (
-    <NumberFormat
+    <NumericFormat
       id={CRYPTO_TEXT_FIELD_ID}
       sx={sx}
       disabled={disabled}
