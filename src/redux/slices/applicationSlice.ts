@@ -18,6 +18,7 @@
 
 import {
   createAsyncThunk,
+  createSelector,
   createSlice,
   Draft,
   PayloadAction,
@@ -25,14 +26,34 @@ import {
 import { LoadingIndicator } from '@/models/LoadingIndicator';
 import { EMPTY_ASSET_IMAGE_URL, CHAIN_TYPE } from '@/common/constants';
 import { IpfsGateway } from '@/models/Gateway';
-import { AlgoWorldCityAsset } from '@/models/AlgoWorldAsset';
+import { AlgoWorldAsset, AlgoWorldCityAsset } from '@/models/AlgoWorldAsset';
 import { ChainType } from '@/models/Chain';
 import getAssetsForAccount from '@/utils/accounts/getAssetsForAccount';
 import optAssets from '@/utils/assets/optAssets';
 import lookupInfluenceDepositTxns from '@/utils/transactions/lookupInfluenceDepositTxns';
 import parseInfluenceDepositTxns from '@/utils/transactions/parseInfluenceDepositTxns';
+import { Asset } from '@/models/Asset';
+import { InfluenceDepositNote } from '@/models/InfluenceDepositNote';
+import { RootState } from '../store';
 
-const initialState = {
+interface ApplicationState {
+  assets: Asset[];
+  influenceTxnNotes: InfluenceDepositNote[];
+  fetchingInfluenceTxnNotes: boolean;
+  fetchingPackPurchaseTxns: boolean;
+  selectedDepositAsset: AlgoWorldAsset | undefined;
+  chain: ChainType;
+  gateway: IpfsGateway;
+  fetchingAccountAssets: boolean;
+
+  isWalletPopupOpen: boolean;
+  isDepositInfluencePopupOpen: boolean;
+  isAboutPopupOpen: boolean;
+  loadingIndicator: LoadingIndicator;
+  theme: string;
+}
+
+const initialState: ApplicationState = {
   assets: [
     {
       index: 0,
@@ -45,7 +66,7 @@ const initialState = {
       imageUrl: EMPTY_ASSET_IMAGE_URL(IpfsGateway.ALGONODE_IO),
       name: `Algo`,
       unitName: `Algo`,
-    },
+    } as Asset,
   ],
   influenceTxnNotes: [],
   fetchingInfluenceTxnNotes: false,
@@ -202,6 +223,11 @@ export const applicationSlice = createSlice({
     });
   },
 });
+
+export const selectAssets = createSelector(
+  (state: RootState) => state.application.assets,
+  (assets) => assets.map((a) => ({ ...a, amount: a.amount })),
+);
 
 export const {
   switchChain,

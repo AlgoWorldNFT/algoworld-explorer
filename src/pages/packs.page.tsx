@@ -33,11 +33,10 @@ import { useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
 import useSWR from 'swr';
 import { CityPack, CityPackType } from '@/models/CityPack';
-import { connector } from '@/redux/store/connector';
 import PackCard from '@/components/Cards/PackCard';
 import InfoDialog from '@/components/Dialogs/InfoDialog';
 import shortenAddress from '@/utils/shortenAddress';
-import { getAccountAssets } from '@/redux/slices/walletConnectSlice';
+import { getAccountAssets } from '@/redux/slices/applicationSlice';
 import router from 'next/router';
 import ViewOnAlgoExplorerButton from '@/components/Buttons/ViewOnAlgoExplorerButton';
 import useLoadingIndicator from '@/redux/hooks/useLoadingIndicator';
@@ -48,14 +47,15 @@ import ConfirmPackPurchaseDialog from '@/components/Dialogs/ConfirmPackPurchaseD
 import PackPurchasesTable from '@/components/Tables/PackPurchasesTable';
 import { SITE_IS_UNDER_MAINTENANCE } from '@/common/constants';
 import MaintenanceLayout from '@/components/Layouts/MaintenanceLayout';
+import { useWallet } from '@txnlab/use-wallet';
+import processTransactions from '@/utils/transactions/processTransactions';
 
 const Packs = () => {
   const theme = useTheme();
   const packPurchaseFee = 0.017;
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
-  const { chain, gateway, address } = useAppSelector(
-    (state) => state.walletConnect,
-  );
+  const { activeAddress: address, signTransactions } = useWallet();
+  const { chain, gateway } = useAppSelector((state) => state.application);
   const [cityPackType, setCityPackType] = useState(CityPackType.Available);
 
   const [confirmSwapDialogOpen, setConfirmSwapDialogOpen] =
@@ -97,18 +97,19 @@ const Packs = () => {
   const signAndSendPackPurchaseTxns = async (selectedPack: CityPack) => {
     const performSwapTxns = await createPerformPackPurchaseTxns(
       chain,
-      address,
+      address as string,
       selectedPack,
     );
 
-    const signedPerformSwapTxns = await connector
-      .signTransactions(performSwapTxns)
-      .catch(() => {
-        enqueueSnackbar(`You have cancelled transactions signing...`, {
-          variant: `error`,
-        });
-        return undefined;
+    const signedPerformSwapTxns = await processTransactions(
+      performSwapTxns,
+      signTransactions,
+    ).catch(() => {
+      enqueueSnackbar(`You have cancelled transactions signing...`, {
+        variant: `error`,
       });
+      return undefined;
+    });
 
     if (!signedPerformSwapTxns) {
       return undefined;
@@ -249,7 +250,7 @@ const Packs = () => {
             dispatch(
               getAccountAssets({
                 chain: chain,
-                address: address,
+                address: address as string,
                 gateway,
               }) as any,
             );

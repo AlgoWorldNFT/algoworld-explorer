@@ -37,7 +37,7 @@ import {
   setIsDepositInfluencePopupOpen,
   setIsWalletPopupOpen,
 } from '@/redux/slices/applicationSlice';
-import { setSelectedDepositAsset } from '@/redux/slices/walletConnectSlice';
+import { setSelectedDepositAsset } from '@/redux/slices/applicationSlice';
 import {
   AWT_ASSET_ID,
   CITY_MANAGER_ADDRESS,
@@ -45,7 +45,6 @@ import {
   SITE_IS_UNDER_MAINTENANCE,
   TXN_SUBMISSION_FAILED_MESSAGE,
 } from '@/common/constants';
-import { connector } from '@/redux/store/connector';
 import submitTransactions from '@/utils/transactions/submitTransactions';
 import { useSnackbar } from 'notistack';
 import createInfluenceDepositTxns from '@/utils/transactions/createInfluenceDepositTxns';
@@ -55,10 +54,13 @@ import ViewOnAlgoExplorerButton from '@/components/Buttons/ViewOnAlgoExplorerBut
 import { toIpfsProxyUrl } from '@/utils/toIpfsProxyUrl';
 import { useRouter } from 'next/router';
 import MaintenanceLayout from '@/components/Layouts/MaintenanceLayout';
+import { useWallet } from '@txnlab/use-wallet';
+import processTransactions from '@/utils/transactions/processTransactions';
 
 const Leaderboard = () => {
-  const { chain, gateway, address, selectedDepositAsset } = useAppSelector(
-    (state) => state.walletConnect,
+  const { activeAddress: address, signTransactions } = useWallet();
+  const { chain, gateway, selectedDepositAsset } = useAppSelector(
+    (state) => state.application,
   );
   const router = useRouter();
   const theme = useTheme();
@@ -103,14 +105,15 @@ const Leaderboard = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const signAndSendInfluenceDepositTxns = async (txns: TransactionToSign[]) => {
-    const signedInfluenceDepositTxns = await connector
-      .signTransactions(txns)
-      .catch(() => {
-        enqueueSnackbar(`You have cancelled transactions signing...`, {
-          variant: `error`,
-        });
-        return undefined;
+    const signedInfluenceDepositTxns = await processTransactions(
+      txns,
+      signTransactions,
+    ).catch(() => {
+      enqueueSnackbar(`You have cancelled transactions signing...`, {
+        variant: `error`,
       });
+      return undefined;
+    });
 
     if (!signedInfluenceDepositTxns) {
       return undefined;
@@ -135,7 +138,7 @@ const Leaderboard = () => {
 
     const txns = await createInfluenceDepositTxns(
       chain,
-      address,
+      address as string,
       CITY_MANAGER_ADDRESS,
       1000,
       depositAmount,

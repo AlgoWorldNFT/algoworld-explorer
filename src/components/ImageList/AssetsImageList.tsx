@@ -57,7 +57,7 @@ const toBase64 = (str: string) =>
 const AssetsImageList = ({ assets }: Props) => {
   const theme = useTheme();
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
-  const { gateway } = useAppSelector((state) => state.walletConnect);
+  const { gateway } = useAppSelector((state) => state.application);
 
   return (
     <ImageList gap={0} cols={largeScreen ? 4 : 1} sx={{ width: `100%` }}>

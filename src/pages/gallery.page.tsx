@@ -39,7 +39,7 @@ import { AlgoWorldCardType } from '@/models/AlgoWorldCardType';
 import AssetsImageList from '@/components/ImageList/AssetsImageList';
 
 const Gallery = () => {
-  const chain = useAppSelector((state) => state.walletConnect.chain);
+  const chain = useAppSelector((state) => state.application.chain);
   const [cardType, setCardType] = useState(AlgoWorldCardType.COUNTRY);
 
   const theme = useTheme();

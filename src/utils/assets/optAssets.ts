@@ -25,15 +25,15 @@ import submitTransactions from '@/utils/transactions/submitTransactions';
 
 import { setLoadingIndicator } from '@/redux/slices/applicationSlice';
 import { Dispatch } from '@reduxjs/toolkit';
-import { getAccountAssets } from '@/redux/slices/walletConnectSlice';
-import WalletManager from '@/wallets/walletManager';
+import { getAccountAssets } from '@/redux/slices/applicationSlice';
 import { IpfsGateway } from '@/models/Gateway';
+import processTransactions from '../transactions/processTransactions';
 
 export default async function optAssets(
   chain: ChainType,
   gateway: IpfsGateway,
   assetIndexes: number[],
-  creatorWallet: WalletManager,
+  signTransactions: (transactions: Array<Uint8Array>) => Promise<Uint8Array[]>,
   creatorAddress: string,
   dispatch: Dispatch,
   deOptIn = false,
@@ -59,7 +59,7 @@ export default async function optAssets(
           assetIndex: index,
           note: new Uint8Array(
             Buffer.from(
-              ` I am an asset opt-${optPrefix} transaction for algoworld city pack escrow, thank you for using AlgoWorld Explorer (☞ ͡° ͜ʖ ͡°)☞`,
+              ` I am an asset opt-${optPrefix} transaction for algoworld swapper escrow, thank you for using AlgoWorld Swapper 🙂`,
             ),
           ),
           closeRemainderTo: deOptIn ? creatorAddress : undefined,
@@ -78,12 +78,13 @@ export default async function optAssets(
     }),
   );
 
-  const signedSaveSwapConfigTxns = await creatorWallet
-    .signTransactions(optInTxns)
-    .catch(() => {
-      dispatch(setLoadingIndicator({ isLoading: false, message: undefined }));
-      return undefined;
-    });
+  const signedSaveSwapConfigTxns = await processTransactions(
+    optInTxns,
+    signTransactions,
+  ).catch(() => {
+    dispatch(setLoadingIndicator({ isLoading: false, message: undefined }));
+    return undefined;
+  });
 
   if (!signedSaveSwapConfigTxns) {
     dispatch(setLoadingIndicator({ isLoading: false, message: undefined }));
@@ -106,7 +107,7 @@ export default async function optAssets(
 
   // Makes sure to reload assets after opt-in
   dispatch(
-    getAccountAssets({ chain, address: creatorAddress, gateway }) as any,
+    getAccountAssets({ chain, gateway, address: creatorAddress }) as any,
   );
 
   return saveSwapConfigResponse.txId;

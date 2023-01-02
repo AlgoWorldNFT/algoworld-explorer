@@ -31,24 +31,9 @@ import Layout from '@/components/Layouts/Layout';
 import store from '@/redux/store';
 import { Slide } from '@mui/material';
 import { GoogleAnalytics } from 'nextjs-google-analytics';
-import {
-  reconnectProviders,
-  initializeProviders,
-  WalletProvider,
-  PROVIDER_ID,
-} from '@txnlab/use-wallet';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
-
-const walletProviders = initializeProviders([
-  PROVIDER_ID.MYALGO,
-  PROVIDER_ID.PERA,
-  PROVIDER_ID.EXODUS,
-  PROVIDER_ID.DEFLY,
-  PROVIDER_ID.WALLETCONNECT,
-  PROVIDER_ID.ALGOSIGNER,
-]);
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -56,10 +41,6 @@ interface MyAppProps extends AppProps {
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-
-  React.useEffect(() => {
-    reconnectProviders(walletProviders);
-  }, []);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -85,26 +66,24 @@ export default function MyApp(props: MyAppProps) {
       </Head>
 
       <Provider store={store}>
-        <WalletProvider value={walletProviders}>
-          <ThemeProvider theme={darkTheme}>
-            <SnackbarProvider
-              maxSnack={3}
-              anchorOrigin={{
-                vertical: `bottom`,
-                horizontal: `center`,
-              }}
-              TransitionComponent={Slide}
-            >
-              <CssBaseline />
-              <Layout title="AlgoWorld Explorer">
-                <>
-                  <GoogleAnalytics />
-                  <Component {...pageProps} />
-                </>
-              </Layout>
-            </SnackbarProvider>
-          </ThemeProvider>
-        </WalletProvider>
+        <ThemeProvider theme={darkTheme}>
+          <SnackbarProvider
+            maxSnack={3}
+            anchorOrigin={{
+              vertical: `bottom`,
+              horizontal: `center`,
+            }}
+            TransitionComponent={Slide}
+          >
+            <CssBaseline />
+            <Layout title="AlgoWorld Explorer">
+              <>
+                <GoogleAnalytics />
+                <Component {...pageProps} />
+              </>
+            </Layout>
+          </SnackbarProvider>
+        </ThemeProvider>
       </Provider>
     </CacheProvider>
   );

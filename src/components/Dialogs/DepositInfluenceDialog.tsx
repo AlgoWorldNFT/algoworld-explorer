@@ -30,12 +30,12 @@ import { FROM_ASSET_PICKER_DIALOG_ID } from './constants';
 import { useAppSelector } from '@/redux/store/hooks';
 import { DialogContentText, Typography } from '@mui/material';
 import { AWT_ASSET_ID } from '@/common/constants';
-import { AlgoWorldCityAsset } from '@/models/AlgoWorldAsset';
+import { AlgoWorldAsset } from '@/models/AlgoWorldAsset';
 
 type Props = {
   onDepositConfirmed: (depositAmount: number) => void;
   onDepositCancelled: () => void;
-  depositAsset: AlgoWorldCityAsset;
+  depositAsset: AlgoWorldAsset;
   open: boolean;
 };
 
@@ -45,8 +45,8 @@ export const DepositInfluenceDialog = ({
   depositAsset,
   open,
 }: Props) => {
-  const assets = useAppSelector((state) => state.walletConnect.assets);
-  const chain = useAppSelector((state) => state.walletConnect.chain);
+  const assets = useAppSelector((state) => state.application.assets);
+  const chain = useAppSelector((state) => state.application.chain);
 
   const [selectedDepositAmount, setSelectedDepositAmount] = useState<
     number | undefined

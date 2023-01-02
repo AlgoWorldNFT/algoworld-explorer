@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1",
+  "javascript": {
+    "name": "algoworld-explorer",
+    "rootDir": "./",
+    "testEnvironment": "node",
+    "testLocationStrategy": "relativeToProjectRoot",
+    "testLocationFolder": "./"
+  }
+}

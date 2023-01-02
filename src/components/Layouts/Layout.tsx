@@ -26,6 +26,12 @@ import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
 import LoadingBackdrop from '../Backdrops/Backdrop';
 import AboutDialog from '../Dialogs/AboutDialog';
 import { setIsAboutPopupOpen } from '@/redux/slices/applicationSlice';
+import {
+  initializeProviders,
+  PROVIDER_ID,
+  reconnectProviders,
+  WalletProvider,
+} from '@txnlab/use-wallet';
 
 type Props = {
   children?: ReactNode;
@@ -38,44 +44,70 @@ const Layout = ({ children, title = `This is the default title` }: Props) => {
   );
   const dispatch = useAppDispatch();
 
-  const isAboutPopupOpen = useAppSelector(
-    (state) => state.application.isAboutPopupOpen,
+  const { isAboutPopupOpen, chain } = useAppSelector(
+    (state) => state.application,
   );
 
+  const walletProviders = React.useMemo(() => {
+    return initializeProviders(
+      [
+        PROVIDER_ID.MYALGO,
+        PROVIDER_ID.PERA,
+        PROVIDER_ID.EXODUS,
+        PROVIDER_ID.DEFLY,
+        PROVIDER_ID.WALLETCONNECT,
+        PROVIDER_ID.ALGOSIGNER,
+      ],
+      {
+        network: chain.toLowerCase(),
+        nodeServer: `http://algod`,
+      },
+    );
+  }, [chain]);
+
+  React.useEffect(() => {
+    reconnectProviders(walletProviders);
+  }, [walletProviders]);
+
   return (
-    <Box
-      sx={{
-        display: `flex`,
-        flexDirection: `column`,
-        minHeight: `100vh`,
-      }}
-    >
-      <AboutDialog
-        open={isAboutPopupOpen}
-        changeState={(state) => {
-          dispatch(setIsAboutPopupOpen(state));
+    <WalletProvider value={walletProviders}>
+      <Box
+        sx={{
+          display: `flex`,
+          flexDirection: `column`,
+          minHeight: `100vh`,
         }}
-      />
-      <Head>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-      <header>
-        <NavBar />
-      </header>
-      <main>
-        <>
-          <LoadingBackdrop
-            isLoading={loadingIndicator.isLoading}
-            message={loadingIndicator.message}
+      >
+        <AboutDialog
+          open={isAboutPopupOpen}
+          changeState={(state) => {
+            dispatch(setIsAboutPopupOpen(state));
+          }}
+        />
+        <Head>
+          <title>{title}</title>
+          <meta charSet="utf-8" />
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
           />
-          <ParticlesContainer />
-          {children}
-        </>
-      </main>
-      <Footer />
-    </Box>
+        </Head>
+        <header>
+          <NavBar />
+        </header>
+        <main>
+          <>
+            <LoadingBackdrop
+              isLoading={loadingIndicator.isLoading}
+              message={loadingIndicator.message}
+            />
+            <ParticlesContainer />
+            {children}
+          </>
+        </main>
+        <Footer />
+      </Box>
+    </WalletProvider>
   );
 };
 export default Layout;

@@ -18,7 +18,7 @@
 
 import PageHeader from '@/components/Headers/PageHeader';
 import { setIsWalletPopupOpen } from '@/redux/slices/applicationSlice';
-import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
+import { useAppDispatch } from '@/redux/store/hooks';
 import {
   Button,
   Container,
@@ -32,6 +32,7 @@ import { useState } from 'react';
 import AlgoWorldTransactionType from '@/models/AlgoWorldTransactionType';
 import InfluenceTransactionsTable from '@/components/Tables/InfluenceTransactionsTable';
 import PackPurchasesTable from '@/components/Tables/PackPurchasesTable';
+import { useWallet } from '@txnlab/use-wallet';
 
 export default function MyTransactions() {
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ export default function MyTransactions() {
   const theme = useTheme();
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
 
-  const address = useAppSelector((state) => state.walletConnect.address);
+  const { activeAddress: address } = useWallet();
 
   const [transactionType, setTransactionType] = useState(
     AlgoWorldTransactionType.InfluenceDeposit,
