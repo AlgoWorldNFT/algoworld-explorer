@@ -19,11 +19,9 @@
 import { ChainType } from '@/models/Chain';
 import { IpfsGateway } from '@/models/Gateway';
 
-export const CHAIN_TYPE: ChainType =
-  (process.env.NEXT_PUBLIC_CHAIN_TYPE ?? `TestNet`) === `TestNet`
-    ? ChainType.TestNet
-    : ChainType.MainNet;
-
+export const CHAIN_TYPE: ChainType = process.env.NEXT_PUBLIC_CHAIN_TYPE
+  ? (process.env.NEXT_PUBLIC_CHAIN_TYPE.trim().toLowerCase() as ChainType)
+  : ChainType.TestNet;
 export const SITE_IS_UNDER_MAINTENANCE =
   process.env.NEXT_PUBLIC_UNDER_MAINTENANCE === `true`;
 
