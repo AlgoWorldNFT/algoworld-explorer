@@ -51,12 +51,12 @@ const Layout = ({ children, title = `This is the default title` }: Props) => {
   const walletProviders = React.useMemo(() => {
     return initializeProviders(
       [
-        PROVIDER_ID.MYALGO,
+        // PROVIDER_ID.MYALGO,
         PROVIDER_ID.PERA,
         PROVIDER_ID.EXODUS,
         PROVIDER_ID.DEFLY,
-        PROVIDER_ID.WALLETCONNECT,
-        PROVIDER_ID.ALGOSIGNER,
+        // PROVIDER_ID.WALLETCONNECT,
+        // PROVIDER_ID.ALGOSIGNER,
       ],
       {
         network: chain.toLowerCase(),
