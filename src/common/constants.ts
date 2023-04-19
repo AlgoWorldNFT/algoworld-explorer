@@ -61,6 +61,9 @@ export const AWT_ASSET_ID = (chain: ChainType) => {
   return chain === ChainType.MainNet ? 233939122 : 51363057;
 };
 export const CITY_MANAGER_ADDRESS = `TSYD5NUVJZLYB3MDFZSAVCSXDDH3ZABDDUARUDAWTU7KVMNVHCH2NQOYWE`;
+export const BUILD_MANAGER_ADDRESS = `75BMV3IXUMULXWV4JCCEET3OXZQU5J32J5CZ62A4DOH4HHF3KTFFX56ZZQ`;
+
+export const OWNER_FEE_PC = 0.5;
 
 export const AWVT_ASSET_INDEX = (chain: ChainType) => {
   return chain === ChainType.MainNet ? 827624831 : 100256867;

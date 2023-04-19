@@ -27,27 +27,38 @@ import { LoadingIndicator } from '@/models/LoadingIndicator';
 import { EMPTY_ASSET_IMAGE_URL, CHAIN_TYPE } from '@/common/constants';
 import { IpfsGateway } from '@/models/Gateway';
 import { AlgoWorldAsset, AlgoWorldCityAsset } from '@/models/AlgoWorldAsset';
+import { MapAsset } from '@/models/MapAsset';
 import { ChainType } from '@/models/Chain';
 import getAssetsForAccount from '@/utils/accounts/getAssetsForAccount';
 import optAssets from '@/utils/assets/optAssets';
 import lookupInfluenceDepositTxns from '@/utils/transactions/lookupInfluenceDepositTxns';
 import parseInfluenceDepositTxns from '@/utils/transactions/parseInfluenceDepositTxns';
+import lookupBuildTxns from '@/utils/transactions/lookupBuildTxns';
+import lookupPendingBuildTxns from '@/utils/transactions/lookupPendingBuildTxns';
+import parseBuildTxns from '@/utils/transactions/parseBuildTxns';
 import { Asset } from '@/models/Asset';
 import { InfluenceDepositNote } from '@/models/InfluenceDepositNote';
+import { BuildNote } from '@/models/BuildNote';
 import { RootState } from '../store';
 
 interface ApplicationState {
   assets: Asset[];
   influenceTxnNotes: InfluenceDepositNote[];
+  BuildTxnNotes: BuildNote[];
+  PendingBuildTxnNotes: BuildNote[];
   fetchingInfluenceTxnNotes: boolean;
+  fetchingBuildTxnNotes: boolean;
+  fetchingPendingBuildTxnNotes: boolean;
   fetchingPackPurchaseTxns: boolean;
   selectedDepositAsset: AlgoWorldAsset | undefined;
+  selectedBuildTile: MapAsset | undefined;
   chain: ChainType;
   gateway: IpfsGateway;
   fetchingAccountAssets: boolean;
 
   isWalletPopupOpen: boolean;
   isDepositInfluencePopupOpen: boolean;
+  isBuildPopupOpen: boolean;
   isAboutPopupOpen: boolean;
   loadingIndicator: LoadingIndicator;
   theme: string;
@@ -69,15 +80,21 @@ const initialState: ApplicationState = {
     } as Asset,
   ],
   influenceTxnNotes: [],
+  BuildTxnNotes: [],
+  PendingBuildTxnNotes: [],
   fetchingInfluenceTxnNotes: false,
+  fetchingBuildTxnNotes: false,
+  fetchingPendingBuildTxnNotes: false,
   fetchingPackPurchaseTxns: false,
   selectedDepositAsset: undefined,
+  selectedBuildTile: undefined,
   chain: CHAIN_TYPE,
   gateway: IpfsGateway.ALGONODE_IO,
   fetchingAccountAssets: false,
 
   isWalletPopupOpen: false,
   isDepositInfluencePopupOpen: false,
+  isBuildPopupOpen: false,
   isAboutPopupOpen: false,
   loadingIndicator: {
     isLoading: false,
@@ -123,6 +140,42 @@ export const getInfluenceDepositTxns = createAsyncThunk(
   },
 );
 
+export const getBuildTxns = createAsyncThunk(
+  `application/getBuildTxns`,
+  async (
+    {
+      chain,
+      address,
+      managerAddress,
+    }: { chain: ChainType; address: string; managerAddress: string },
+    {},
+  ) => {
+    const rawTxns = await lookupBuildTxns(chain, address, managerAddress);
+
+    const processedBuildTxnNotes = await parseBuildTxns(rawTxns, chain);
+
+    return processedBuildTxnNotes;
+  },
+);
+
+export const getPendingBuildTxns = createAsyncThunk(
+  `application/getPendingBuildTxns`,
+  async (
+    {
+      chain,
+      block,
+      managerAddress,
+    }: { chain: ChainType; block: number; managerAddress: string },
+    {},
+  ) => {
+    const rawTxns = await lookupPendingBuildTxns(chain, block, managerAddress);
+
+    const processedPendingBuildTxnNotes = await parseBuildTxns(rawTxns, chain);
+
+    return processedPendingBuildTxnNotes;
+  },
+);
+
 export const performOptAssets = createAsyncThunk(
   `application/performOptAssets`,
   async (
@@ -165,6 +218,7 @@ export const applicationSlice = createSlice({
       if (action.payload && state.chain !== action.payload) {
         state.chain = action.payload;
         state.selectedDepositAsset = undefined;
+        state.selectedBuildTile = undefined;
 
         if (typeof window !== `undefined`) {
           localStorage.setItem(`ChainType`, action.payload);
@@ -176,6 +230,9 @@ export const applicationSlice = createSlice({
       action: PayloadAction<AlgoWorldCityAsset | undefined>,
     ) {
       state.selectedDepositAsset = action.payload;
+    },
+    setSelectedBuildTile(state, action: PayloadAction<MapAsset | undefined>) {
+      state.selectedBuildTile = action.payload;
     },
     setGateway: (state, action: PayloadAction<IpfsGateway>) => {
       state.gateway = action.payload;
@@ -194,6 +251,9 @@ export const applicationSlice = createSlice({
     },
     setIsDepositInfluencePopupOpen: (state, action: PayloadAction<boolean>) => {
       state.isDepositInfluencePopupOpen = action.payload;
+    },
+    setIsBuildPopupOpen: (state, action: PayloadAction<boolean>) => {
+      state.isBuildPopupOpen = action.payload;
     },
     setIsAboutPopupOpen: (state, action: PayloadAction<boolean>) => {
       state.isAboutPopupOpen = action.payload;
@@ -221,6 +281,22 @@ export const applicationSlice = createSlice({
     builder.addCase(getInfluenceDepositTxns.pending, (state) => {
       state.fetchingInfluenceTxnNotes = true;
     });
+
+    builder.addCase(getBuildTxns.fulfilled, (state, action) => {
+      state.fetchingBuildTxnNotes = false;
+      state.BuildTxnNotes = action.payload;
+    });
+    builder.addCase(getBuildTxns.pending, (state) => {
+      state.fetchingBuildTxnNotes = true;
+    });
+
+    builder.addCase(getPendingBuildTxns.fulfilled, (state, action) => {
+      state.fetchingPendingBuildTxnNotes = false;
+      state.PendingBuildTxnNotes = action.payload;
+    });
+    builder.addCase(getPendingBuildTxns.pending, (state) => {
+      state.fetchingPendingBuildTxnNotes = true;
+    });
   },
 });
 
@@ -233,9 +309,11 @@ export const {
   switchChain,
   reset,
   setSelectedDepositAsset,
+  setSelectedBuildTile,
   setGateway,
   setIsWalletPopupOpen,
   setIsDepositInfluencePopupOpen,
+  setIsBuildPopupOpen,
   setIsAboutPopupOpen,
   setLoadingIndicator,
   setTheme,

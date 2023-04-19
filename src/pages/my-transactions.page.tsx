@@ -32,6 +32,7 @@ import { useState } from 'react';
 import AlgoWorldTransactionType from '@/models/AlgoWorldTransactionType';
 import InfluenceTransactionsTable from '@/components/Tables/InfluenceTransactionsTable';
 import PackPurchasesTable from '@/components/Tables/PackPurchasesTable';
+import BuildTransactionsTable from '@/components/Tables/BuildTransactionsTable';
 import { useWallet } from '@txnlab/use-wallet';
 
 export default function MyTransactions() {
@@ -75,6 +76,9 @@ export default function MyTransactions() {
             <ToggleButton value={AlgoWorldTransactionType.InfluenceDeposit}>
               Influence deposits
             </ToggleButton>
+            <ToggleButton value={AlgoWorldTransactionType.BuildTransaction}>
+              Build transactions
+            </ToggleButton>
             <ToggleButton value={AlgoWorldTransactionType.PackPurchase}>
               Pack purchases
             </ToggleButton>
@@ -100,6 +104,8 @@ export default function MyTransactions() {
           </Button>
         ) : transactionType === AlgoWorldTransactionType.InfluenceDeposit ? (
           <InfluenceTransactionsTable />
+        ) : transactionType === AlgoWorldTransactionType.BuildTransaction ? (
+          <BuildTransactionsTable />
         ) : (
           <PackPurchasesTable address={address} />
         )}

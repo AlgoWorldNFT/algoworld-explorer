@@ -16,10 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-enum AlgoWorldTransactionType {
-  InfluenceDeposit = `influence`,
-  BuildTransaction = `build`,
-  PackPurchase = `pack`,
-}
-
-export default AlgoWorldTransactionType;
+export type BuildNote = {
+  prefix: string;
+  receiver: string;
+  assetIndex: number;
+  deposit: number;
+  object: number;
+  noteId: string;
+};
