@@ -44,8 +44,8 @@ import { RootState } from '../store';
 interface ApplicationState {
   assets: Asset[];
   influenceTxnNotes: InfluenceDepositNote[];
-  BuildTxnNotes: BuildNote[];
-  PendingBuildTxnNotes: BuildNote[];
+  buildTxnNotes: BuildNote[];
+  pendingBuildTxnNotes: BuildNote[];
   fetchingInfluenceTxnNotes: boolean;
   fetchingBuildTxnNotes: boolean;
   fetchingPendingBuildTxnNotes: boolean;
@@ -80,8 +80,8 @@ const initialState: ApplicationState = {
     } as Asset,
   ],
   influenceTxnNotes: [],
-  BuildTxnNotes: [],
-  PendingBuildTxnNotes: [],
+  buildTxnNotes: [],
+  pendingBuildTxnNotes: [],
   fetchingInfluenceTxnNotes: false,
   fetchingBuildTxnNotes: false,
   fetchingPendingBuildTxnNotes: false,
@@ -284,7 +284,7 @@ export const applicationSlice = createSlice({
 
     builder.addCase(getBuildTxns.fulfilled, (state, action) => {
       state.fetchingBuildTxnNotes = false;
-      state.BuildTxnNotes = action.payload;
+      state.buildTxnNotes = action.payload;
     });
     builder.addCase(getBuildTxns.pending, (state) => {
       state.fetchingBuildTxnNotes = true;
@@ -292,7 +292,7 @@ export const applicationSlice = createSlice({
 
     builder.addCase(getPendingBuildTxns.fulfilled, (state, action) => {
       state.fetchingPendingBuildTxnNotes = false;
-      state.PendingBuildTxnNotes = action.payload;
+      state.pendingBuildTxnNotes = action.payload;
     });
     builder.addCase(getPendingBuildTxns.pending, (state) => {
       state.fetchingPendingBuildTxnNotes = true;

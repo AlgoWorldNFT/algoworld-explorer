@@ -35,6 +35,7 @@ import {
 } from '@mui/material';
 import { AWT_ASSET_ID } from '@/common/constants';
 import { MapAsset } from '@/models/MapAsset';
+import { TextureType } from '@/models/TextureType';
 
 type Props = {
   onDepositConfirmed: (object: number) => void;
@@ -69,33 +70,6 @@ export const BuildDialog = ({
     setSelectedobject(event.target.value);
   };
 
-  const renderSwitch = (param: number) => {
-    switch (param) {
-      case 1:
-        return `Meadow`;
-      case 2:
-        return `Forest`;
-      case 3:
-        return `Water`;
-      case 4:
-        return `House`;
-      case 5:
-        return `Castle`;
-      case 11:
-        return `Meadow`;
-      case 21:
-        return `Forest`;
-      case 31:
-        return `Water`;
-      case 41:
-        return `House`;
-      case 51:
-        return `Castle`;
-      default:
-        return `Black Hole`;
-    }
-  };
-
   return (
     <div>
       <Dialog id={FROM_ASSET_PICKER_DIALOG_ID} open={open}>
@@ -128,7 +102,10 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, fontWeight: `bold`, color: `warning.main` }}
           >
-            {`Current state : ${renderSwitch(depositAsset.object)}`}
+            {`Current state : ${TextureType[depositAsset.object].replace(
+              `_pending`,
+              ` (pending)`,
+            )}`}
           </Typography>
           <Typography
             fontSize={14}

@@ -48,15 +48,16 @@ const Build = () => {
     return assetsResponse.data;
   }, [assetsResponse.data, assetsResponse.error]);
 
-  const PendingBuildTxnNotes = useAppSelector(
-    (state) => state.application.PendingBuildTxnNotes,
+  const pendingBuildTxnNotes = useAppSelector(
+    (state) => state.application.pendingBuildTxnNotes,
   );
 
   const assets_pending: MapAsset[] = useMemo(() => {
     const assets_pending_temp: MapAsset[] = assets.map((item) => ({ ...item }));
 
     /* update the tiles with the latest transactions */
-    PendingBuildTxnNotes.slice()
+    pendingBuildTxnNotes
+      .slice()
       .reverse()
       .forEach((note) => {
         if (assets_pending_temp.length > 0) {
@@ -71,7 +72,7 @@ const Build = () => {
         }
       });
     return assets_pending_temp;
-  }, [assets, PendingBuildTxnNotes]);
+  }, [assets, pendingBuildTxnNotes]);
 
   return chain.toLowerCase() === `mainnet` ? (
     <MaintenanceLayout />

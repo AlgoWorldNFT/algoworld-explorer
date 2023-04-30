@@ -17,6 +17,7 @@
  */
 
 import { MapAsset } from '@/models/MapAsset';
+import { TextureType } from '@/models/TextureType';
 import { useState, useMemo } from 'react';
 import { BuildDialog } from '@/components/Dialogs/BuildDialog';
 import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
@@ -61,7 +62,6 @@ const gridContainer = {
 };
 
 const MapList = ({ tiles }: Props) => {
-  /* 01/04/23 */
   const { activeAddress: address, signTransactions } = useWallet();
   const { chain, selectedBuildTile } = useAppSelector(
     (state) => state.application,
@@ -170,32 +170,42 @@ const MapList = ({ tiles }: Props) => {
 
   return (
     <div>
-      <FormControl component="fieldset" variant="standard">
-        <FormLabel component="legend">Your tiles</FormLabel>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={isChecked_owner}
-                onChange={() => setIsChecked_owner(!isChecked_owner)}
-                name="owner"
-              />
-            }
-            label="Tiles that you own"
-          />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={isChecked_builder}
-                onChange={() => setIsChecked_builder(!isChecked_builder)}
-                name="builder"
-              />
-            }
-            label="Tiles that you built"
-          />
-        </FormGroup>
-        <FormHelperText>Highlight tiles that you own or built</FormHelperText>
-      </FormControl>
+      {address ? (
+        <FormControl component="fieldset" variant="standard">
+          <FormLabel component="legend">Your tiles</FormLabel>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isChecked_owner}
+                  onChange={() => setIsChecked_owner(!isChecked_owner)}
+                  name="owner"
+                />
+              }
+              label="Tiles that you own"
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isChecked_builder}
+                  onChange={() => setIsChecked_builder(!isChecked_builder)}
+                  name="builder"
+                />
+              }
+              label="Tiles that you built"
+            />
+          </FormGroup>
+          <FormHelperText>Highlight tiles that you own or built</FormHelperText>
+        </FormControl>
+      ) : (
+        <Button
+          onClick={() => {
+            dispatch(setIsWalletPopupOpen(true));
+          }}
+        >
+          Connect your wallet and start building!
+        </Button>
+      )}
 
       <Box sx={gridContainer}>
         {tiles.map((item) => (
@@ -212,7 +222,7 @@ const MapList = ({ tiles }: Props) => {
               }),
             }}
             alt="tile image"
-            src={`/` + item.object.toString() + `.png`}
+            src={`/` + TextureType[item.object].toLowerCase() + `.png`}
             onClick={() => {
               /*open the popup window and indicate the tile to build */
               handleSelectBuildTile(item);
