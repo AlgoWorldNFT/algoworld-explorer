@@ -198,13 +198,22 @@ const MapList = ({ tiles }: Props) => {
           <FormHelperText>Highlight tiles that you own or built</FormHelperText>
         </FormControl>
       ) : (
-        <Button
-          onClick={() => {
-            dispatch(setIsWalletPopupOpen(true));
+        <Box
+          sx={{
+            display: `flex`,
+            justifyContent: `center`,
+            marginBottom: 2, // Adjust this value for spacing below the button
           }}
         >
-          Connect your wallet and start building!
-        </Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              dispatch(setIsWalletPopupOpen(true));
+            }}
+          >
+            Connect your wallet and start building!
+          </Button>
+        </Box>
       )}
 
       <Box sx={gridContainer}>
