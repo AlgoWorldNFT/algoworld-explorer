@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /**
  * AlgoWorld Explorer
  * Copyright (C) 2022 AlgoWorld
@@ -32,6 +33,9 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
 } from '@mui/material';
 import { AWT_ASSET_ID } from '@/common/constants';
 import { MapAsset } from '@/models/MapAsset';
@@ -70,11 +74,58 @@ export const BuildDialog = ({
     setSelectedobject(event.target.value);
   };
 
+  /* map_enum is an array created from TextureType, with a filter to keep only text keys */
+  const map_enum = Object.keys(TextureType).filter((v) => isNaN(Number(v)));
+  /* we remove pending assets */
+  const map_enum_filt = map_enum.filter((v) => !v.includes(`pending`));
+
   return (
     <div>
-      <Dialog id={FROM_ASSET_PICKER_DIALOG_ID} open={open}>
+      <Dialog id={FROM_ASSET_PICKER_DIALOG_ID} open={open} scroll={`paper`}>
         <DialogTitle>What do you want to build?</DialogTitle>
-        <DialogContent sx={{ maxWidth: `400px` }}>
+        <DialogContent sx={{ maxWidth: `400px` }} dividers={true}>
+          <ImageList
+            sx={{
+              width: 300,
+            }}
+            cols={3}
+            rowHeight={100}
+          >
+            {map_enum_filt.map((key) => (
+              // eslint-disable-next-line react/jsx-no-comment-textnodes
+              <ImageListItem
+                key={key}
+                sx={{
+                  ...(TextureType[Number(selectedobject)] === key && {
+                    border: 2,
+                    borderColor: `red`,
+                  }),
+                }}
+                onClick={() => {
+                  setSelectedobject(
+                    TextureType[key as keyof typeof TextureType].toString(),
+                  );
+                }}
+              >
+                <img
+                  src={`${
+                    `/` + key.toLowerCase() + `.png`
+                  }?w=100&h=100&fit=crop&auto=format`}
+                  srcSet={`${
+                    `/` + key.toLowerCase() + `.png`
+                  }?w=100&h=100&fit=crop&auto=format&dpr=2 2x`}
+                  alt={key}
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  title={key}
+                  sx={{
+                    height: 30,
+                  }}
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
           <Select
             labelId="build-select-label"
             id="build-select"
