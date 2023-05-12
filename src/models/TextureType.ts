@@ -17,14 +17,14 @@
  */
 
 export enum TextureType {
-  Meadow = 1,
-  Forest = 2,
-  Water = 3,
-  House = 4,
-  Castle = 5,
-  Meadow_pending = 11,
-  Forest_pending = 21,
-  Water_pending = 31,
-  House_pending = 41,
-  Castle_pending = 51,
+  Meadow,
+  Forest,
+  Water,
+  House,
+  Castle,
+  Meadow_pending,
+  Forest_pending,
+  Water_pending,
+  House_pending,
+  Castle_pending,
 }

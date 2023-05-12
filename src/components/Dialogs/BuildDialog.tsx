@@ -30,9 +30,6 @@ import { useAppSelector } from '@/redux/store/hooks';
 import {
   DialogContentText,
   Typography,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
   ImageList,
   ImageListItem,
   ImageListItemBar,
@@ -42,7 +39,7 @@ import { MapAsset } from '@/models/MapAsset';
 import { TextureType } from '@/models/TextureType';
 
 type Props = {
-  onDepositConfirmed: (object: number) => void;
+  onDepositConfirmed: (object: string) => void;
   onDepositCancelled: () => void;
   depositAsset: MapAsset;
   open: boolean;
@@ -57,7 +54,7 @@ export const BuildDialog = ({
   const assets = useAppSelector((state) => state.application.assets);
   const chain = useAppSelector((state) => state.application.chain);
 
-  const [selectedobject, setSelectedobject] = useState(`1`);
+  const [selectedobject, setSelectedobject] = useState(`Meadow`);
 
   const awtAsset = useMemo(() => {
     const filteredAssets = assets.filter(
@@ -69,10 +66,6 @@ export const BuildDialog = ({
   const enough_awt =
     (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) >
     depositAsset.cost;
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedobject(event.target.value);
-  };
 
   /* map_enum is an array created from TextureType, with a filter to keep only text keys */
   const map_enum = Object.keys(TextureType).filter((v) => isNaN(Number(v)));
@@ -96,15 +89,13 @@ export const BuildDialog = ({
               <ImageListItem
                 key={key}
                 sx={{
-                  ...(TextureType[Number(selectedobject)] === key && {
+                  ...(selectedobject === key && {
                     border: 2,
                     borderColor: `red`,
                   }),
                 }}
                 onClick={() => {
-                  setSelectedobject(
-                    TextureType[key as keyof typeof TextureType].toString(),
-                  );
+                  setSelectedobject(key);
                 }}
               >
                 <img
@@ -126,19 +117,6 @@ export const BuildDialog = ({
               </ImageListItem>
             ))}
           </ImageList>
-          <Select
-            labelId="build-select-label"
-            id="build-select"
-            value={selectedobject}
-            label="What do you want to build?"
-            onChange={handleChange}
-          >
-            <MenuItem value={1}>Meadow</MenuItem>
-            <MenuItem value={2}>Forest</MenuItem>
-            <MenuItem value={3}>Water</MenuItem>
-            <MenuItem value={4}>House</MenuItem>
-            <MenuItem value={5}>Castle</MenuItem>
-          </Select>
 
           <DialogContentText
             fontSize={14}
@@ -153,7 +131,7 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, fontWeight: `bold`, color: `warning.main` }}
           >
-            {`Current state : ${TextureType[depositAsset.object].replace(
+            {`Current state : ${depositAsset.object.replace(
               `_pending`,
               ` (pending)`,
             )}`}
@@ -202,15 +180,13 @@ export const BuildDialog = ({
             disabled={
               !(
                 enough_awt &&
-                Number(selectedobject) &&
-                Number(selectedobject) != depositAsset.object &&
-                Number(selectedobject) !=
-                  (depositAsset.object - (depositAsset.object % 10)) / 10
+                selectedobject &&
+                !depositAsset.object.includes(selectedobject)
               )
             }
             onClick={() => {
               if (awtAsset && selectedobject) {
-                onDepositConfirmed(Number(selectedobject));
+                onDepositConfirmed(selectedobject);
                 setSelectedobject(`0`);
               }
             }}

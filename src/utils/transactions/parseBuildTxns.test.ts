@@ -35,7 +35,7 @@ describe(`parseBuildTxns`, () => {
         receiver: `1`,
         assetIndex: 1,
         deposit: 1000,
-        object: 0,
+        object: `0`,
         noteId: `7`,
       },
       {
@@ -43,7 +43,7 @@ describe(`parseBuildTxns`, () => {
         receiver: `1`,
         assetIndex: 1,
         deposit: 1000,
-        object: 0,
+        object: `0`,
         noteId: `8`,
       },
     ];

@@ -17,7 +17,6 @@
  */
 
 import { MapAsset } from '@/models/MapAsset';
-import { TextureType } from '@/models/TextureType';
 import { useState, useMemo } from 'react';
 import { BuildDialog } from '@/components/Dialogs/BuildDialog';
 import { useAppDispatch, useAppSelector } from '@/redux/store/hooks';
@@ -112,7 +111,7 @@ const MapList = ({ tiles }: Props) => {
 
   const handleBuildTile = async (
     depositAmount: number,
-    objecttype: number,
+    objecttype: string,
     assetIndex: number,
     owner: string,
     awtIndex: number,
@@ -231,7 +230,7 @@ const MapList = ({ tiles }: Props) => {
               }),
             }}
             alt="tile image"
-            src={`/` + TextureType[item.object].toLowerCase() + `.png`}
+            src={`/` + item.object.toLowerCase() + `.png`}
             onClick={() => {
               /*open the popup window and indicate the tile to build */
               handleSelectBuildTile(item);
@@ -241,7 +240,7 @@ const MapList = ({ tiles }: Props) => {
 
         {selectedBuildTile && isBuildPopupOpen && (
           <BuildDialog
-            onDepositConfirmed={function (objecttype: number): void {
+            onDepositConfirmed={function (objecttype: string): void {
               dispatch(setIsBuildPopupOpen(false));
               handleBuildTile(
                 selectedBuildTile.cost,

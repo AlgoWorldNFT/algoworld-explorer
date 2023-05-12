@@ -22,7 +22,7 @@ object: index of the object on the tile
 */
 export type MapAsset = {
   index: number;
-  object: number;
+  object: string;
   builder: string;
   owner: string;
   cost: number;

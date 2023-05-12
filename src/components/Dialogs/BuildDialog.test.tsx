@@ -11,7 +11,7 @@ describe(`BuildDialog`, () => {
   const depositAsset = {
     index: 1,
     cost: 10,
-    object: 1,
+    object: `1`,
     builder: `builderAddress`,
     owner: `ownerAddress`,
   };

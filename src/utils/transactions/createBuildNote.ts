@@ -20,7 +20,7 @@ export default function createBuildNote(
   managerAddr: string,
   assetId: number,
   depositAmount: number,
-  objecttype: number,
+  objecttype: string,
   noteId: string,
 ) {
   return `awebuild_${managerAddr}_${assetId}_${depositAmount}_${objecttype}_${noteId}`;

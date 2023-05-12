@@ -33,7 +33,7 @@ const Build = () => {
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
 
   const assetsUrl = useMemo(() => {
-    return `https://raw.githubusercontent.com/MattAlgoworld/algoworld-build-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/build/database.json`;
+    return `https://raw.githubusercontent.com/MattAlgoworld/algoworld-build-workers/test/data/${chain.toLowerCase()}/build/database.json`;
   }, [chain]);
 
   const assetsResponse = useSWR(assetsUrl, (url: string) => {
@@ -66,7 +66,7 @@ const Build = () => {
             `builder` in assets_pending_temp[note.assetIndex - 1]
           ) {
             assets_pending_temp[note.assetIndex - 1].object =
-              note.object * 10 + 1;
+              note.object.concat(`_pending`);
             assets_pending_temp[note.assetIndex - 1].builder = `PENDING...`;
           }
         }

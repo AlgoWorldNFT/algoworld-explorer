@@ -31,7 +31,7 @@ export default async function createBuildTxns(
   receiver: string,
   fundingFee: number,
   depositAmount: number,
-  objecttype: number,
+  objecttype: string,
   depositAssetIndex: number,
   owner: string,
   AWTIndex: number,
