@@ -16,10 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-enum AlgoWorldTransactionType {
-  InfluenceDeposit = `influence`,
-  BuildTransaction = `build`,
-  PackPurchase = `pack`,
+export enum TextureType {
+  Meadow,
+  Forest,
+  Water,
+  House,
+  Castle,
+  Meadow_pending,
+  Forest_pending,
+  Water_pending,
+  House_pending,
+  Castle_pending,
 }
-
-export default AlgoWorldTransactionType;

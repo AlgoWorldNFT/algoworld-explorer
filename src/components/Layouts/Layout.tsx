@@ -55,6 +55,7 @@ const Layout = ({ children, title = `This is the default title` }: Props) => {
         PROVIDER_ID.PERA,
         PROVIDER_ID.EXODUS,
         PROVIDER_ID.DEFLY,
+        PROVIDER_ID.DAFFI,
         // PROVIDER_ID.WALLETCONNECT,
         // PROVIDER_ID.ALGOSIGNER,
       ],

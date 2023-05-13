@@ -16,10 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-enum AlgoWorldTransactionType {
-  InfluenceDeposit = `influence`,
-  BuildTransaction = `build`,
-  PackPurchase = `pack`,
-}
-
-export default AlgoWorldTransactionType;
+/*
+index: number of the tile on the map
+object: index of the object on the tile
+*/
+export type MapAsset = {
+  index: number;
+  object: string;
+  builder: string;
+  owner: string;
+  cost: number;
+};

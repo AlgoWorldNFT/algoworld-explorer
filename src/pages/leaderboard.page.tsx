@@ -81,6 +81,7 @@ const Leaderboard = () => {
     if (citiesResponse.error || !citiesResponse.data) {
       return [];
     }
+
     return [...citiesResponse.data].sort(
       (a: AlgoWorldCityAsset, b: AlgoWorldCityAsset) =>
         b.influence - a.influence,

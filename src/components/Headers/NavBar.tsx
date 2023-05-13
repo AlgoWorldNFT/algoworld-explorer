@@ -35,9 +35,12 @@ import {
   selectAssets,
   switchChain,
   getInfluenceDepositTxns,
+  getBuildTxns,
+  getPendingBuildTxns,
   setGateway,
 } from '@/redux/slices/applicationSlice';
 import { Asset } from '@/models/Asset';
+import { BlockNote } from '@/models/BlockNote';
 import {
   setIsAboutPopupOpen,
   setIsWalletPopupOpen,
@@ -56,7 +59,10 @@ import {
 } from '@mui/material';
 import { ChainType } from '@/models/Chain';
 import Link from 'next/link';
-import { CITY_MANAGER_ADDRESS } from '@/common/constants';
+import {
+  CITY_MANAGER_ADDRESS,
+  BUILD_MANAGER_ADDRESS,
+} from '@/common/constants';
 import createAlgoExplorerUrl from '@/utils/createAlgoExplorerUrl';
 import formatBigNumWithDecimals from '@/utils/formatBigNumWithDecimals';
 import AlgoExplorerUrlType from '@/models/AlgoExplorerUrlType';
@@ -82,6 +88,7 @@ import getNFDsForAddress from '@/utils/accounts/getNFDsForAddress';
 import { useAsync } from 'react-use';
 import { useWallet } from '@txnlab/use-wallet';
 import { ellipseText, ellipseAddress } from '@/redux/helpers/utilities';
+import useSWR from 'swr';
 
 type PageConfiguration = {
   title: string;
@@ -92,6 +99,7 @@ type PageConfiguration = {
 
 const pages = [
   { title: `Gallery`, url: `/gallery` },
+  { title: `Build an AlgoWorld`, url: `/build` },
   { title: `Leaderboard`, url: `/leaderboard` },
   { title: `Packs`, url: `/packs` },
   { title: `Docs`, url: `https://docs.algoworld.io`, target: `_blank` },
@@ -213,6 +221,23 @@ const NavBar = () => {
     }
   };
 
+  /*  */
+  const lastblockUrl = React.useMemo(() => {
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/testnet/data/${selectedChain.toLowerCase()}/aw_build/metadata.json`;
+  }, [selectedChain]);
+
+  const lastblockResponse = useSWR(lastblockUrl, (url: string) => {
+    return fetch(url).then((res) => res.json());
+  });
+
+  const processedlastblock: BlockNote = React.useMemo(() => {
+    if (lastblockResponse.error || !lastblockResponse.data) {
+      return {};
+    }
+    return lastblockResponse.data;
+  }, [lastblockResponse]);
+  /* end of code added 0410 */
+
   useEffect(() => {
     const changeChain = (chain: ChainType) => {
       dispatch(switchChain(chain));
@@ -241,6 +266,17 @@ const NavBar = () => {
       }
     }
 
+    /*  */
+    if (processedlastblock[`last_processed_block`]) {
+      dispatch(
+        getPendingBuildTxns({
+          chain: selectedChain,
+          block: processedlastblock[`last_processed_block`],
+          managerAddress: BUILD_MANAGER_ADDRESS,
+        }),
+      );
+    }
+
     if (activeAddress) {
       dispatch(
         getAccountAssets({
@@ -256,8 +292,22 @@ const NavBar = () => {
           managerAddress: CITY_MANAGER_ADDRESS,
         }),
       );
+      dispatch(
+        getBuildTxns({
+          chain: selectedChain,
+          address: activeAddress,
+          managerAddress: BUILD_MANAGER_ADDRESS,
+        }),
+      );
     }
-  }, [dispatch, activeAddress, selectedChain, chain, gateway]);
+  }, [
+    dispatch,
+    processedlastblock,
+    activeAddress,
+    selectedChain,
+    chain,
+    gateway,
+  ]);
 
   const nativeCurrency = assets.find(
     (asset: Asset) => asset.index === 0,

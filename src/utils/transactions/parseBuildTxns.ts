@@ -16,10 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-enum AlgoWorldTransactionType {
-  InfluenceDeposit = `influence`,
-  BuildTransaction = `build`,
-  PackPurchase = `pack`,
-}
+import { BuildNote } from '@/models/BuildNote';
 
-export default AlgoWorldTransactionType;
+export default async function parseBuildTxns(
+  txns: Record<string, any>[],
+): Promise<BuildNote[]> {
+  const processedTxns: BuildNote[] = [];
+
+  for (const tx of txns) {
+    try {
+      const decodedNote = Buffer.from(tx[`note`], `base64`)
+        .toString(`utf8`)
+        .split(`_`);
+      const noteContent = {
+        prefix: decodedNote[0],
+        receiver: decodedNote[1],
+        assetIndex: Number(decodedNote[2]),
+        deposit: Number(decodedNote[3]),
+        object: decodedNote[4],
+        noteId: decodedNote[5],
+      } as BuildNote;
+      processedTxns.push(noteContent);
+    } catch (e) {
+      continue;
+    }
+  }
+
+  return processedTxns;
+}

@@ -16,10 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-enum AlgoWorldTransactionType {
-  InfluenceDeposit = `influence`,
-  BuildTransaction = `build`,
-  PackPurchase = `pack`,
+export default function createBuildNote(
+  managerAddr: string,
+  assetId: number,
+  depositAmount: number,
+  objectType: string,
+  noteId: string,
+) {
+  return `awebuild_${managerAddr}_${assetId}_${depositAmount}_${objectType}_${noteId}`;
 }
-
-export default AlgoWorldTransactionType;
