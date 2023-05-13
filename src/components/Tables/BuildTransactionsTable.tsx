@@ -133,7 +133,7 @@ const BuildTransactionsTable = () => {
     (state) => state.application.buildTxnNotes,
   );
   const processedBuildUrl = React.useMemo(() => {
-    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/build/processed_notes.json`;
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/aw_build/processed_notes.json`;
   }, [chain]);
 
   const processedBuildResponse = useSWR(processedBuildUrl, (url: string) => {

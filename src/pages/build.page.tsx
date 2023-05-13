@@ -33,7 +33,7 @@ const Build = () => {
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
 
   const assetsUrl = useMemo(() => {
-    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/testnet/data/${chain.toLowerCase()}/aw_build/database.json`;
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/aw_build/database.json`;
   }, [chain]);
 
   const assetsResponse = useSWR(assetsUrl, (url: string) => {
