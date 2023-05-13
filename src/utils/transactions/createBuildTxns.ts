@@ -31,7 +31,7 @@ export default async function createBuildTxns(
   receiver: string,
   fundingFee: number,
   depositAmount: number,
-  objecttype: number,
+  objectType: string,
   depositAssetIndex: number,
   owner: string,
   AWTIndex: number,
@@ -63,7 +63,7 @@ export default async function createBuildTxns(
     BUILD_MANAGER_ADDRESS,
     depositAssetIndex,
     depositAmount,
-    objecttype,
+    objectType,
     noteId,
   );
 

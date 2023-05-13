@@ -33,7 +33,7 @@ export default async function parseBuildTxns(
         receiver: decodedNote[1],
         assetIndex: Number(decodedNote[2]),
         deposit: Number(decodedNote[3]),
-        object: Number(decodedNote[4]),
+        object: decodedNote[4],
         noteId: decodedNote[5],
       } as BuildNote;
       processedTxns.push(noteContent);

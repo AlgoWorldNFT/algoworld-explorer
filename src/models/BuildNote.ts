@@ -21,6 +21,6 @@ export type BuildNote = {
   receiver: string;
   assetIndex: number;
   deposit: number;
-  object: number;
+  object: string;
   noteId: string;
 };

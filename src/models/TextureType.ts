@@ -16,14 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-index: number of the tile on the map
-object: index of the object on the tile
-*/
-export type MapAsset = {
-  index: number;
-  object: string;
-  builder: string;
-  owner: string;
-  cost: number;
-};
+export enum TextureType {
+  Meadow,
+  Forest,
+  Water,
+  House,
+  Castle,
+  Meadow_pending,
+  Forest_pending,
+  Water_pending,
+  House_pending,
+  Castle_pending,
+}

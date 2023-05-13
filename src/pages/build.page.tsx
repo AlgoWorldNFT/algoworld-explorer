@@ -33,7 +33,7 @@ const Build = () => {
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
 
   const assetsUrl = useMemo(() => {
-    return `https://raw.githubusercontent.com/MattAlgoworld/algoworld-build-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/build/database.json`;
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/testnet/data/${chain.toLowerCase()}/aw_build/database.json`;
   }, [chain]);
 
   const assetsResponse = useSWR(assetsUrl, (url: string) => {
@@ -48,15 +48,16 @@ const Build = () => {
     return assetsResponse.data;
   }, [assetsResponse.data, assetsResponse.error]);
 
-  const PendingBuildTxnNotes = useAppSelector(
-    (state) => state.application.PendingBuildTxnNotes,
+  const pendingBuildTxnNotes = useAppSelector(
+    (state) => state.application.pendingBuildTxnNotes,
   );
 
   const assets_pending: MapAsset[] = useMemo(() => {
     const assets_pending_temp: MapAsset[] = assets.map((item) => ({ ...item }));
 
     /* update the tiles with the latest transactions */
-    PendingBuildTxnNotes.slice()
+    pendingBuildTxnNotes
+      .slice()
       .reverse()
       .forEach((note) => {
         if (assets_pending_temp.length > 0) {
@@ -65,13 +66,13 @@ const Build = () => {
             `builder` in assets_pending_temp[note.assetIndex - 1]
           ) {
             assets_pending_temp[note.assetIndex - 1].object =
-              note.object * 10 + 1;
+              note.object.concat(`_pending`);
             assets_pending_temp[note.assetIndex - 1].builder = `PENDING...`;
           }
         }
       });
     return assets_pending_temp;
-  }, [assets, PendingBuildTxnNotes]);
+  }, [assets, pendingBuildTxnNotes]);
 
   return chain.toLowerCase() === `mainnet` ? (
     <MaintenanceLayout />
@@ -88,6 +89,7 @@ const Build = () => {
           pb: 15,
           pl: largeScreen ? 15 : 2,
           pr: largeScreen ? 15 : 2,
+          borderRadius: 5,
         }}
       >
         <MapList tiles={assets_pending} />

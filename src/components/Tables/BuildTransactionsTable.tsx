@@ -129,11 +129,11 @@ const getColumns = (chain: ChainType) => {
 
 const BuildTransactionsTable = () => {
   const chain = useAppSelector((state) => state.application.chain);
-  const BuildTxnNotes = useAppSelector(
-    (state) => state.application.BuildTxnNotes,
+  const buildTxnNotes = useAppSelector(
+    (state) => state.application.buildTxnNotes,
   );
   const processedBuildUrl = React.useMemo(() => {
-    return `https://raw.githubusercontent.com/MattAlgoworld/algoworld-build-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/build/processed_notes.json`;
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/build/processed_notes.json`;
   }, [chain]);
 
   const processedBuildResponse = useSWR(processedBuildUrl, (url: string) => {
@@ -168,7 +168,7 @@ const BuildTransactionsTable = () => {
   const BuildTransactions: GithubBuildData[] = React.useMemo(() => {
     const depositTransactions: GithubBuildData[] = [];
 
-    BuildTxnNotes.forEach(async (note) => {
+    buildTxnNotes.forEach(async (note) => {
       if (note.noteId in processedBuildData) {
         const processedNote = processedBuild.find(
           (element) => element.noteId === note.noteId,
@@ -192,7 +192,7 @@ const BuildTransactionsTable = () => {
     });
 
     return depositTransactions;
-  }, [BuildTxnNotes, processedBuild, processedBuildData]);
+  }, [buildTxnNotes, processedBuild, processedBuildData]);
 
   return (
     <Box

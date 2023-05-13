@@ -58,10 +58,11 @@ type Props = {
 const gridContainer = {
   display: `grid`,
   gridTemplateColumns: `repeat(6, 6fr)`,
+  borderRadius: 5,
+  overflow: `hidden`,
 };
 
 const MapList = ({ tiles }: Props) => {
-  /* 01/04/23 */
   const { activeAddress: address, signTransactions } = useWallet();
   const { chain, selectedBuildTile } = useAppSelector(
     (state) => state.application,
@@ -112,7 +113,7 @@ const MapList = ({ tiles }: Props) => {
 
   const handleBuildTile = async (
     depositAmount: number,
-    objecttype: number,
+    objectType: string,
     assetIndex: number,
     owner: string,
     awtIndex: number,
@@ -127,7 +128,7 @@ const MapList = ({ tiles }: Props) => {
       BUILD_MANAGER_ADDRESS,
       1000,
       depositAmount,
-      objecttype,
+      objectType,
       assetIndex,
       owner,
       awtIndex,
@@ -170,32 +171,51 @@ const MapList = ({ tiles }: Props) => {
 
   return (
     <div>
-      <FormControl component="fieldset" variant="standard">
-        <FormLabel component="legend">Your tiles</FormLabel>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={isChecked_owner}
-                onChange={() => setIsChecked_owner(!isChecked_owner)}
-                name="owner"
-              />
-            }
-            label="Tiles that you own"
-          />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={isChecked_builder}
-                onChange={() => setIsChecked_builder(!isChecked_builder)}
-                name="builder"
-              />
-            }
-            label="Tiles that you built"
-          />
-        </FormGroup>
-        <FormHelperText>Highlight tiles that you own or built</FormHelperText>
-      </FormControl>
+      {address ? (
+        <FormControl component="fieldset" variant="standard">
+          <FormLabel component="legend">Your tiles</FormLabel>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isChecked_owner}
+                  onChange={() => setIsChecked_owner(!isChecked_owner)}
+                  name="owner"
+                />
+              }
+              label="Tiles that you own"
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isChecked_builder}
+                  onChange={() => setIsChecked_builder(!isChecked_builder)}
+                  name="builder"
+                />
+              }
+              label="Tiles that you built"
+            />
+          </FormGroup>
+          <FormHelperText>Highlight tiles that you own or built</FormHelperText>
+        </FormControl>
+      ) : (
+        <Box
+          sx={{
+            display: `flex`,
+            justifyContent: `center`,
+            marginBottom: 2, // Adjust this value for spacing below the button
+          }}
+        >
+          <Button
+            variant="outlined"
+            onClick={() => {
+              dispatch(setIsWalletPopupOpen(true));
+            }}
+          >
+            Connect your wallet and start building!
+          </Button>
+        </Box>
+      )}
 
       <Box sx={gridContainer}>
         {tiles.map((item) => (
@@ -212,7 +232,7 @@ const MapList = ({ tiles }: Props) => {
               }),
             }}
             alt="tile image"
-            src={`/` + item.object.toString() + `.png`}
+            src={`/` + String(item.object).toLowerCase() + `.png`}
             onClick={() => {
               /*open the popup window and indicate the tile to build */
               handleSelectBuildTile(item);
@@ -222,11 +242,11 @@ const MapList = ({ tiles }: Props) => {
 
         {selectedBuildTile && isBuildPopupOpen && (
           <BuildDialog
-            onDepositConfirmed={function (objecttype: number): void {
+            onDepositConfirmed={function (objectType: string): void {
               dispatch(setIsBuildPopupOpen(false));
               handleBuildTile(
                 selectedBuildTile.cost,
-                objecttype,
+                objectType,
                 selectedBuildTile.index,
                 selectedBuildTile.owner,
                 awtIndex,

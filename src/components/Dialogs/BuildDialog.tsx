@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /**
  * AlgoWorld Explorer
  * Copyright (C) 2022 AlgoWorld
@@ -29,15 +30,16 @@ import { useAppSelector } from '@/redux/store/hooks';
 import {
   DialogContentText,
   Typography,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
 } from '@mui/material';
 import { AWT_ASSET_ID } from '@/common/constants';
 import { MapAsset } from '@/models/MapAsset';
+import { TextureType } from '@/models/TextureType';
 
 type Props = {
-  onDepositConfirmed: (object: number) => void;
+  onDepositConfirmed: (object: string) => void;
   onDepositCancelled: () => void;
   depositAsset: MapAsset;
   open: boolean;
@@ -52,7 +54,7 @@ export const BuildDialog = ({
   const assets = useAppSelector((state) => state.application.assets);
   const chain = useAppSelector((state) => state.application.chain);
 
-  const [selectedobject, setSelectedobject] = useState(`1`);
+  const [selectedobject, setSelectedobject] = useState(`Meadow`);
 
   const awtAsset = useMemo(() => {
     const filteredAssets = assets.filter(
@@ -65,55 +67,56 @@ export const BuildDialog = ({
     (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) >
     depositAsset.cost;
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedobject(event.target.value);
-  };
-
-  const renderSwitch = (param: number) => {
-    switch (param) {
-      case 1:
-        return `Meadow`;
-      case 2:
-        return `Forest`;
-      case 3:
-        return `Water`;
-      case 4:
-        return `House`;
-      case 5:
-        return `Castle`;
-      case 11:
-        return `Meadow`;
-      case 21:
-        return `Forest`;
-      case 31:
-        return `Water`;
-      case 41:
-        return `House`;
-      case 51:
-        return `Castle`;
-      default:
-        return `Black Hole`;
-    }
-  };
+  /* map_enum is an array created from TextureType, with a filter to keep only text keys */
+  const map_enum = Object.keys(TextureType).filter((v) => isNaN(Number(v)));
+  /* we remove pending assets */
+  const map_enum_filt = map_enum.filter((v) => !v.includes(`pending`));
 
   return (
     <div>
-      <Dialog id={FROM_ASSET_PICKER_DIALOG_ID} open={open}>
+      <Dialog id={FROM_ASSET_PICKER_DIALOG_ID} open={open} scroll={`paper`}>
         <DialogTitle>What do you want to build?</DialogTitle>
-        <DialogContent sx={{ maxWidth: `400px` }}>
-          <Select
-            labelId="build-select-label"
-            id="build-select"
-            value={selectedobject}
-            label="What do you want to build?"
-            onChange={handleChange}
+        <DialogContent sx={{ maxWidth: `400px` }} dividers={true}>
+          <ImageList
+            sx={{
+              width: 300,
+            }}
+            cols={3}
+            rowHeight={100}
           >
-            <MenuItem value={1}>Meadow</MenuItem>
-            <MenuItem value={2}>Forest</MenuItem>
-            <MenuItem value={3}>Water</MenuItem>
-            <MenuItem value={4}>House</MenuItem>
-            <MenuItem value={5}>Castle</MenuItem>
-          </Select>
+            {map_enum_filt.map((key) => (
+              // eslint-disable-next-line react/jsx-no-comment-textnodes
+              <ImageListItem
+                key={key}
+                sx={{
+                  ...(selectedobject === key && {
+                    border: 2,
+                    borderColor: `red`,
+                  }),
+                }}
+                onClick={() => {
+                  setSelectedobject(key);
+                }}
+              >
+                <img
+                  src={`${
+                    `/` + key.toLowerCase() + `.png`
+                  }?w=100&h=100&fit=crop&auto=format`}
+                  srcSet={`${
+                    `/` + key.toLowerCase() + `.png`
+                  }?w=100&h=100&fit=crop&auto=format&dpr=2 2x`}
+                  alt={key}
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  title={key}
+                  sx={{
+                    height: 30,
+                  }}
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
 
           <DialogContentText
             fontSize={14}
@@ -128,7 +131,10 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, fontWeight: `bold`, color: `warning.main` }}
           >
-            {`Current state : ${renderSwitch(depositAsset.object)}`}
+            {`Current state : ${depositAsset.object.replace(
+              `_pending`,
+              ` (pending)`,
+            )}`}
           </Typography>
           <Typography
             fontSize={14}
@@ -174,15 +180,13 @@ export const BuildDialog = ({
             disabled={
               !(
                 enough_awt &&
-                Number(selectedobject) &&
-                Number(selectedobject) != depositAsset.object &&
-                Number(selectedobject) !=
-                  (depositAsset.object - (depositAsset.object % 10)) / 10
+                selectedobject &&
+                !depositAsset.object.includes(selectedobject)
               )
             }
             onClick={() => {
               if (awtAsset && selectedobject) {
-                onDepositConfirmed(Number(selectedobject));
+                onDepositConfirmed(selectedobject);
                 setSelectedobject(`0`);
               }
             }}

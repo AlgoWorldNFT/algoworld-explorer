@@ -223,7 +223,7 @@ const NavBar = () => {
 
   /*  */
   const lastblockUrl = React.useMemo(() => {
-    return `https://raw.githubusercontent.com/MattAlgoworld/algoworld-build-workers/${selectedChain.toLowerCase()}/data/${selectedChain.toLowerCase()}/build/metadata.json`;
+    return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/testnet/data/${selectedChain.toLowerCase()}/aw_build/metadata.json`;
   }, [selectedChain]);
 
   const lastblockResponse = useSWR(lastblockUrl, (url: string) => {
