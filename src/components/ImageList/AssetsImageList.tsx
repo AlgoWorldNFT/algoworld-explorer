@@ -80,10 +80,10 @@ const AssetsImageList = ({ assets }: Props) => {
               placeholder="blur"
               style={{
                 maxWidth: `100%`,
-                minHeight: `475px`,
+                minHeight: `300ypx`,
                 height: `auto`,
               }}
-              width={700}
+              width={475}
               height={475}
               alt={`AlgoWorld Card`}
             />
