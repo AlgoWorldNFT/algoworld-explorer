@@ -11,10 +11,9 @@ describe(`AboutDialog`, () => {
 
     // Check that the dialog renders with the correct title and content
     expect(
-      getByText(
-        `AlgoWorld Explorer is a free and open-source NFT explorer built for AlgoWorld NFT community. Distributed under GPLv3 license.`,
-        { exact: false },
-      ),
+      getByText(`AlgoWorld Explorer is a free and open-source`, {
+        exact: false,
+      }),
     ).toBeInTheDocument();
 
     // Check that clicking the close button calls the changeState function with the correct argument

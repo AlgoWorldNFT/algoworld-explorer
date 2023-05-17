@@ -24,6 +24,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import pJson from '../../../package.json';
+import {
+  Accordion,
+  AccordionSummary,
+  Typography,
+  AccordionDetails,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { PRIVACY_MD, TOC_MD } from '@/common/constants';
+import useSWR from 'swr';
+import ReactMarkdown from 'react-markdown';
 
 type Props = {
   open: boolean;
@@ -32,6 +42,35 @@ type Props = {
 
 export default function AboutDialog({ open, changeState }: Props) {
   const descriptionElementRef = React.useRef<HTMLElement>(null);
+
+  const tocMdResponse = useSWR(TOC_MD, (url) => {
+    return fetch(url).then((res) => {
+      return res.text();
+    });
+  });
+
+  const privacyMdResponse = useSWR(PRIVACY_MD, (url) => {
+    return fetch(url).then((res) => {
+      return res.text();
+    });
+  });
+
+  const tocMd: string = React.useMemo(() => {
+    if (tocMdResponse.error || !tocMdResponse.data) {
+      return `N/A`;
+    }
+
+    return tocMdResponse.data;
+  }, [tocMdResponse]);
+
+  const privacyMd: string = React.useMemo(() => {
+    if (privacyMdResponse.error || !privacyMdResponse.data) {
+      return `N/A`;
+    }
+
+    return privacyMdResponse.data;
+  }, [privacyMdResponse]);
+
   React.useEffect(() => {
     if (open) {
       const { current: descriptionElement } = descriptionElementRef;
@@ -50,12 +89,38 @@ export default function AboutDialog({ open, changeState }: Props) {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle color={`primary`} id="scroll-dialog-title">
-          {`AlgoWorld Explorer v${pJson.version}`}
+          AlgoWorld Explorer v{pJson.version}
         </DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText ref={descriptionElementRef} tabIndex={-1}>
-            {`AlgoWorld Explorer is a free and open-source NFT explorer built for AlgoWorld NFT community. Distributed under GPLv3 license.`}
+            {`AlgoWorld Explorer is a free and open-source tool for browsing AlgoWorld Algorand standard assets. Distributed under GPLv3 license.`}
           </DialogContentText>
+          <br />
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Terms of services</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <ReactMarkdown>{tocMd}</ReactMarkdown>
+            </AccordionDetails>
+          </Accordion>
+          <br />
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Privacy policy</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <ReactMarkdown>{privacyMd}</ReactMarkdown>
+            </AccordionDetails>
+          </Accordion>
         </DialogContent>
         <DialogActions>
           <Button
