@@ -24,7 +24,7 @@ import { MapAsset } from '@/models/MapAsset';
 import { useAppSelector } from '@/redux/store/hooks';
 import useSWR from 'swr';
 import MapList from '@/components/ImageList/MapList';
-import MaintenanceLayout from '@/components/Layouts/MaintenanceLayout';
+import { Link as MuiLink } from '@mui/material';
 
 const Build = () => {
   const chain = useAppSelector((state) => state.application.chain);
@@ -74,15 +74,24 @@ const Build = () => {
     return assets_pending_temp;
   }, [assets, pendingBuildTxnNotes]);
 
-  return chain.toLowerCase() === `mainnet` ? (
-    <MaintenanceLayout />
-  ) : (
+  return (
     <div>
       <PageHeader
         title="🛠 Build an AlgoWorld"
-        description="A cooperative building experience"
+        description="A cooperative building experience."
       />
 
+      <Container
+        component="main"
+        sx={{
+          pb: 10,
+          pl: largeScreen ? 15 : 2,
+          pr: largeScreen ? 15 : 2,
+          borderRadius: 5,
+        }}
+      >
+        <MapList tiles={assets_pending} />
+      </Container>
       <Container
         component="main"
         sx={{
@@ -90,9 +99,56 @@ const Build = () => {
           pl: largeScreen ? 15 : 2,
           pr: largeScreen ? 15 : 2,
           borderRadius: 5,
+          fontStyle: `oblique`,
+          fontSize: 15,
         }}
       >
-        <MapList tiles={assets_pending} />
+        <div>
+          What is Build an AlgoWorld?
+          <br />
+          <br />
+          Build an AlogWorld is a feature that allows you to build your
+          constructions on a common map by using your AlgoWorld Tokens. Each
+          tile is an NFT you can own. Owning a tile will get you 50% of every
+          construction fee on your tile.
+          <br />
+          <br />
+          1,000 AWT are sent daily and shared between builders of a House or
+          Castle. You will get a bonus by building Meadow, Water and Forest
+          tiles.
+          <br />
+          Defend your tiles and conquer other territories!
+          <br />
+          <br />
+          Get more details on{` `}
+          <MuiLink
+            color="inherit"
+            target="_blank"
+            rel="noopener"
+            href="https://algoworld.io"
+          >
+            algoworld.io
+          </MuiLink>
+          ,{` `}
+          <MuiLink
+            color="inherit"
+            target="_blank"
+            rel="noopener"
+            href="https://t.me/algoworld_nft"
+          >
+            Telegram
+          </MuiLink>
+          ,{` `}or{` `}
+          <MuiLink
+            color="inherit"
+            target="_blank"
+            rel="noopener"
+            href="https://t.co/mKeMHwRuD7"
+          >
+            Discord
+          </MuiLink>
+          .
+        </div>
       </Container>
     </div>
   );
