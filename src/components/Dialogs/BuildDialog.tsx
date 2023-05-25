@@ -109,7 +109,7 @@ export const BuildDialog = ({
                   loading="lazy"
                 />
                 <ImageListItemBar
-                  title={key}
+                  title={key.replace(`_`, ` `)}
                   sx={{
                     height: 30,
                   }}
@@ -131,10 +131,7 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, fontWeight: `bold`, color: `warning.main` }}
           >
-            {`Current state : ${depositAsset.object.replace(
-              `_pending`,
-              ` (pending)`,
-            )}`}
+            {`Current state : ${depositAsset.object.replace(`_`, ` `)}`}
           </Typography>
           <Typography
             fontSize={14}

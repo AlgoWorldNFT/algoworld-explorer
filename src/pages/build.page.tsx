@@ -107,7 +107,7 @@ const Build = () => {
           What is Build an AlgoWorld?
           <br />
           <br />
-          Build an AlogWorld is a feature that allows you to build your
+          Build an AlgoWorld is a feature that allows you to build your
           constructions on a common map by using your AlgoWorld Tokens. Each
           tile is an NFT you can own. Owning a tile will get you 50% of every
           construction fee on your tile.
