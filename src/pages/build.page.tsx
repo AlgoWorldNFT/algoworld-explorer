@@ -25,6 +25,8 @@ import { useAppSelector } from '@/redux/store/hooks';
 import useSWR from 'swr';
 import MapList from '@/components/ImageList/MapList';
 import { Link as MuiLink } from '@mui/material';
+import { SITE_IS_UNDER_MAINTENANCE } from '@/common/constants';
+import MaintenanceLayout from '@/components/Layouts/MaintenanceLayout';
 
 const Build = () => {
   const chain = useAppSelector((state) => state.application.chain);
@@ -74,7 +76,9 @@ const Build = () => {
     return assets_pending_temp;
   }, [assets, pendingBuildTxnNotes]);
 
-  return (
+  return SITE_IS_UNDER_MAINTENANCE ? (
+    <MaintenanceLayout />
+  ) : (
     <div>
       <PageHeader
         title="🛠 Build an AlgoWorld"
