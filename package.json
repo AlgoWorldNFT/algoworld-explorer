@@ -37,7 +37,7 @@
     "@emotion/react": "11.11.0",
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.11.0",
-    "@fontsource/roboto": "4.5.8",
+    "@fontsource/roboto": "5.0.3",
     "@hookform/resolvers": "2.9.11",
     "@json-rpc-tools/utils": "1.7.6",
     "@mui/icons-material": "5.11.16",
