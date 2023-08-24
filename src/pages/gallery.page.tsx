@@ -19,7 +19,9 @@
 import {
   Container,
   Grid,
+  Grow,
   Pagination,
+  Paper,
   Stack,
   ToggleButton,
   ToggleButtonGroup,
@@ -28,6 +30,7 @@ import {
 } from '@mui/material';
 import PageHeader from '@/components/Headers/PageHeader';
 
+import Image from 'next/image';
 import SearchBar from '@/components/SearchBars/SearchBar';
 import { paginate } from '@/utils/paginate';
 import { useEffect, useMemo, useState } from 'react';
@@ -37,10 +40,40 @@ import { useAppSelector } from '@/redux/store/hooks';
 import useSWR from 'swr';
 import { AlgoWorldCardType } from '@/models/AlgoWorldCardType';
 import AssetsImageList from '@/components/ImageList/AssetsImageList';
+import { toIpfsProxyUrl } from '@/utils/toIpfsProxyUrl';
+import { EMPTY_ASSET_IMAGE_URL } from '@/common/constants';
+
+class Mulberry32 {
+  constructor(private seed: number) {}
+
+  random(): number {
+    let t = (this.seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+}
+
+function getTodaySeed(): number {
+  const today = new Date();
+  return (
+    today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
+  );
+}
+
+function getRandomObjects<T>(arr: T[], count: number): T[] {
+  const shuffled = [...arr];
+  const prng = new Mulberry32(getTodaySeed());
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(prng.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled.slice(0, count);
+}
 
 const Gallery = () => {
-  const chain = useAppSelector((state) => state.application.chain);
   const [cardType, setCardType] = useState(AlgoWorldCardType.COUNTRY);
+  const { chain, gateway } = useAppSelector((state) => state.application);
 
   const theme = useTheme();
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
@@ -67,6 +100,11 @@ const Gallery = () => {
   const [page, setPage] = useState(0);
   const rowsPerPage = 8;
 
+  const featuredAssets = useMemo(
+    () => getRandomObjects(currentAssets, 3),
+    [currentAssets],
+  );
+
   useMemo(() => {
     if (searchValue.length > 0) {
       setPage(0);
@@ -92,6 +130,37 @@ const Gallery = () => {
 
   return (
     <div>
+      <Paper>
+        <PageHeader
+          title="⭐ Featured"
+          description="Randomly featured AlgoWorld NFTs"
+        />
+
+        {featuredAssets.length === 3 && (
+          <Grow in {...{ timeout: 750 }}>
+            <Stack direction={`row`} justifyContent={`space-evenly`}>
+              {featuredAssets.map((city) => {
+                return (
+                  <Image
+                    key={city.index}
+                    src={toIpfsProxyUrl(city.url, gateway)}
+                    loading="eager"
+                    blurDataURL={EMPTY_ASSET_IMAGE_URL(gateway)}
+                    placeholder="blur"
+                    width={largeScreen ? 200 : 110}
+                    height={largeScreen ? 350 : 130}
+                    style={{
+                      height: `auto`,
+                    }}
+                    alt={`AlgoWorld Card`}
+                  />
+                );
+              })}
+            </Stack>
+          </Grow>
+        )}
+      </Paper>
+      <br />
       <PageHeader title="🏠 Gallery" description="Explore all AlgoWorld NFTs" />
 
       <Container
@@ -121,6 +190,7 @@ const Gallery = () => {
               pt: 2,
               justifyContent: `center`,
               width: `100%`,
+              flexDirection: largeScreen ? `row` : `column`, // Adjust the direction based on the screen size
             }}
             exclusive
             defaultChecked

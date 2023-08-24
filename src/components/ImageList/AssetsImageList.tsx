@@ -60,15 +60,12 @@ const AssetsImageList = ({ assets }: Props) => {
   const { gateway } = useAppSelector((state) => state.application);
 
   return (
-    <ImageList gap={0} cols={largeScreen ? 4 : 1} sx={{ width: `100%` }}>
+    <ImageList gap={0} cols={largeScreen ? 4 : 2} sx={{ width: `100%` }}>
       {assets.map((item) => (
         <Grow key={item.index} in {...{ timeout: 1000 }}>
           <ImageListItem
             sx={{
               display: `flex`,
-              width: `100%`,
-              height: `100%`,
-              justifyContent: `top`,
             }}
           >
             <Image
@@ -80,11 +77,11 @@ const AssetsImageList = ({ assets }: Props) => {
               placeholder="blur"
               style={{
                 maxWidth: `100%`,
-                minHeight: `300ypx`,
+                minHeight: `200px`,
                 height: `auto`,
               }}
-              width={475}
-              height={475}
+              width={largeScreen ? 475 : 200}
+              height={largeScreen ? 475 : 200}
               alt={`AlgoWorld Card`}
             />
             <ImageListItemBar
