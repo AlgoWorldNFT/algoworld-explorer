@@ -5,12 +5,6 @@ import {
   NAV_BAR_CHAIN_SWITCH_ID,
 } from './constants';
 
-jest.mock(`algorand-walletconnect-qrcode-modal`, () => {
-  return jest.fn().mockImplementation(() => {
-    return {};
-  });
-});
-
 jest.mock(`next/router`, () => {
   return {
     useRouter: jest.fn().mockReturnValue({ query: { chain: `testnet` } }),
