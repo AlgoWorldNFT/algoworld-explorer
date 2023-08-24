@@ -30,7 +30,9 @@ const ParticlesContainer = () => {
       init={particlesInit}
       options={{
         background: {
-          color: `#222222`,
+          color: {
+            value: `#111111`,
+          },
         },
         fullScreen: {
           enable: true,
@@ -73,7 +75,7 @@ const ParticlesContainer = () => {
             enable: true,
             outMode: `bounce`,
             random: true,
-            speed: 2,
+            speed: 0.5,
             straight: false,
           },
           number: {

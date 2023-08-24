@@ -27,11 +27,13 @@ import LoadingBackdrop from '../Backdrops/Backdrop';
 import AboutDialog from '../Dialogs/AboutDialog';
 import { setIsAboutPopupOpen } from '@/redux/slices/applicationSlice';
 import {
-  initializeProviders,
-  PROVIDER_ID,
-  reconnectProviders,
   WalletProvider,
+  PROVIDER_ID,
+  useInitializeProviders,
 } from '@txnlab/use-wallet';
+import { DeflyWalletConnect } from '@blockshake/defly-connect';
+import { DaffiWalletConnect } from '@daffiwallet/connect';
+import { PeraWalletConnect } from '@perawallet/connect';
 
 type Props = {
   children?: ReactNode;
@@ -44,31 +46,16 @@ const Layout = ({ children, title = `This is the default title` }: Props) => {
   );
   const dispatch = useAppDispatch();
 
-  const { isAboutPopupOpen, chain } = useAppSelector(
-    (state) => state.application,
-  );
+  const { isAboutPopupOpen } = useAppSelector((state) => state.application);
 
-  const walletProviders = React.useMemo(() => {
-    return initializeProviders(
-      [
-        // PROVIDER_ID.MYALGO,
-        PROVIDER_ID.PERA,
-        PROVIDER_ID.EXODUS,
-        PROVIDER_ID.DEFLY,
-        PROVIDER_ID.DAFFI,
-        // PROVIDER_ID.WALLETCONNECT,
-        // PROVIDER_ID.ALGOSIGNER,
-      ],
-      {
-        network: chain.toLowerCase(),
-        nodeServer: `http://algod`,
-      },
-    );
-  }, [chain]);
-
-  React.useEffect(() => {
-    reconnectProviders(walletProviders);
-  }, [walletProviders]);
+  const walletProviders = useInitializeProviders({
+    providers: [
+      { id: PROVIDER_ID.PERA, clientStatic: PeraWalletConnect },
+      { id: PROVIDER_ID.DEFLY, clientStatic: DeflyWalletConnect },
+      { id: PROVIDER_ID.EXODUS },
+      { id: PROVIDER_ID.DAFFI, clientStatic: DaffiWalletConnect },
+    ],
+  });
 
   return (
     <WalletProvider value={walletProviders}>

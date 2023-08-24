@@ -20,6 +20,9 @@ import { createTheme } from '@mui/material';
 
 /* istanbul ignore next */
 const darkTheme = createTheme({
+  typography: {
+    fontFamily: `"JetBrains Mono", monospace`,
+  },
   palette: {
     mode: `dark`,
     primary: {

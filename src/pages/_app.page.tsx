@@ -74,15 +74,14 @@ export default function MyApp(props: MyAppProps) {
               horizontal: `center`,
             }}
             TransitionComponent={Slide}
-          >
-            <CssBaseline />
-            <Layout title="AlgoWorld Explorer">
-              <>
-                <GoogleAnalytics />
-                <Component {...pageProps} />
-              </>
-            </Layout>
-          </SnackbarProvider>
+          />
+          <CssBaseline />
+          <Layout title="AlgoWorld Explorer">
+            <>
+              <GoogleAnalytics />
+              <Component {...pageProps} />
+            </>
+          </Layout>
         </ThemeProvider>
       </Provider>
     </CacheProvider>
