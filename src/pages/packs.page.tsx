@@ -38,7 +38,7 @@ import InfoDialog from '@/components/Dialogs/InfoDialog';
 import shortenAddress from '@/utils/shortenAddress';
 import { getAccountAssets } from '@/redux/slices/applicationSlice';
 import router from 'next/router';
-import ViewOnAlgoExplorerButton from '@/components/Buttons/ViewOnAlgoExplorerButton';
+import ViewOnAlloExplorerButton from '@/components/Buttons/ViewOnAlloExplorerButton';
 import useLoadingIndicator from '@/redux/hooks/useLoadingIndicator';
 import { useSnackbar } from 'notistack';
 import createPerformPackPurchaseTxns from '@/utils/transactions/createPerformPackPurchaseTxns';
@@ -139,7 +139,7 @@ const Packs = () => {
 
     enqueueSnackbar(`City Pack purchased successfully...`, {
       variant: `success`,
-      action: () => <ViewOnAlgoExplorerButton chain={chain} txId={txId} />,
+      action: () => <ViewOnAlloExplorerButton chain={chain} txId={txId} />,
     });
 
     setShareSwapDialogOpen(true);
