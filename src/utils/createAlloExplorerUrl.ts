@@ -31,7 +31,7 @@ function AlloExplorerUrlTypeToPath(type: AlloExplorerUrlType) {
   }
 }
 
-export default function createAlgoExplorerUrl(
+export default function createAlloExplorerUrl(
   chain: ChainType,
   input: string,
   type: AlloExplorerUrlType,

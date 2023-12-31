@@ -63,7 +63,7 @@ import {
   CITY_MANAGER_ADDRESS,
   BUILD_MANAGER_ADDRESS,
 } from '@/common/constants';
-import createAlgoExplorerUrl from '@/utils/createAlloExplorerUrl';
+import createAlloExplorerUrl from '@/utils/createAlloExplorerUrl';
 import formatBigNumWithDecimals from '@/utils/formatBigNumWithDecimals';
 import AlloExplorerUrlType from '@/models/AlloExplorerUrlType';
 import {
@@ -203,7 +203,7 @@ const NavBar = () => {
 
     if (event.target.textContent === `Allo Explorer` && activeAddress) {
       window.open(
-        createAlgoExplorerUrl(
+        createAlloExplorerUrl(
           selectedChain,
           activeAddress,
           AlloExplorerUrlType.Address,

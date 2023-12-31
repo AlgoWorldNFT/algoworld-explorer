@@ -19,7 +19,7 @@
 import { Button } from '@mui/material';
 
 import { ChainType } from '@/models/Chain';
-import createAlgoExplorerUrl from '@/utils/createAlloExplorerUrl';
+import createAlloExplorerUrl from '@/utils/createAlloExplorerUrl';
 import AlloExplorerUrlType from '@/models/AlloExplorerUrlType';
 
 type Props = {
@@ -39,7 +39,7 @@ const ViewOnAlloExplorerButton = ({
     <Button
       target={`_blank`}
       disabled={disabled}
-      href={createAlgoExplorerUrl(chain, txId, AlloExplorerUrlType.Transaction)}
+      href={createAlloExplorerUrl(chain, txId, AlloExplorerUrlType.Transaction)}
     >
       {customLabel ? customLabel : `View on Allo Explorer`}
     </Button>

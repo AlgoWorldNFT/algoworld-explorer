@@ -1,6 +1,6 @@
 import AlloExplorerUrlType from '@/models/AlloExplorerUrlType';
 import { ChainType } from '@/models/Chain';
-import createAlgoExplorerUrl from '@/utils/createAlloExplorerUrl';
+import createAlloExplorerUrl from '@/utils/createAlloExplorerUrl';
 
 describe(`createAlloExplorerUrl()`, () => {
   it.each([
@@ -8,7 +8,7 @@ describe(`createAlloExplorerUrl()`, () => {
       `test`,
       ChainType.MainNet,
       AlloExplorerUrlType.Address,
-      `https://allo.info/address/test`,
+      `https://allo.info/account/test`,
     ],
     [
       `test`,
@@ -20,13 +20,13 @@ describe(`createAlloExplorerUrl()`, () => {
       `test`,
       ChainType.MainNet,
       AlloExplorerUrlType.Transaction,
-      `https://testnet.allo.info/tx/test`,
+      `https://allo.info/tx/test`,
     ],
     [
       `test`,
       ChainType.TestNet,
       AlloExplorerUrlType.Address,
-      `https://testnet.allo.info/address/test`,
+      `https://testnet.allo.info/account/test`,
     ],
     [
       `test`,
@@ -48,7 +48,7 @@ describe(`createAlloExplorerUrl()`, () => {
       urlType: AlloExplorerUrlType,
       expectedUrl: string,
     ) => {
-      expect(createAlgoExplorerUrl(chainType, input, urlType)).toEqual(
+      expect(createAlloExplorerUrl(chainType, input, urlType)).toEqual(
         expectedUrl,
       );
     },
