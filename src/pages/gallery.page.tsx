@@ -77,6 +77,7 @@ const Gallery = () => {
 
   const theme = useTheme();
   const largeScreen = useMediaQuery(theme.breakpoints.up(`sm`));
+  const smallScreen = useMediaQuery(theme.breakpoints.down(`sm`));
 
   const assetsUrl = useMemo(() => {
     return `https://raw.githubusercontent.com/AlgoWorldNFT/algoworld-workers/${chain.toLowerCase()}/data/${chain.toLowerCase()}/${cardType.toLowerCase()}/database.json`;
@@ -190,7 +191,7 @@ const Gallery = () => {
               pt: 2,
               justifyContent: `center`,
               width: `100%`,
-              flexDirection: largeScreen ? `row` : `column`, // Adjust the direction based on the screen size
+              flexDirection: smallScreen ? `column` : `row`, // Adjust the direction based on the screen size
             }}
             exclusive
             defaultChecked

@@ -35,7 +35,7 @@ import { useSnackbar } from 'notistack';
 import createBuildTxns from '@/utils/transactions/createBuildTxns';
 import { TransactionToSign } from '@/models/Transaction';
 import useLoadingIndicator from '@/redux/hooks/useLoadingIndicator';
-import ViewOnAlgoExplorerButton from '@/components/Buttons/ViewOnAlgoExplorerButton';
+import ViewOnAlloExplorerButton from '@/components/Buttons/ViewOnAlloExplorerButton';
 import { useRouter } from 'next/router';
 import { useWallet } from '@txnlab/use-wallet';
 import processTransactions from '@/utils/transactions/processTransactions';
@@ -157,7 +157,7 @@ const MapList = ({ tiles }: Props) => {
             >
               View My Transactions
             </Button>
-            <ViewOnAlgoExplorerButton chain={chain} txId={txId} />
+            <ViewOnAlloExplorerButton chain={chain} txId={txId} />
           </>
         ),
       },

@@ -25,7 +25,7 @@ import {
 } from '@/models/InfluenceDepositNoteData';
 import { useAppSelector } from '@/redux/store/hooks';
 import useSWR from 'swr';
-import ViewOnAlgoExplorerButton from '../Buttons/ViewOnAlgoExplorerButton';
+import ViewOnAlloExplorerButton from '../Buttons/ViewOnAlloExplorerButton';
 import { ChainType } from '@/models/Chain';
 import shortenAddress from '@/utils/shortenAddress';
 
@@ -130,14 +130,14 @@ const getColumns = (chain: ChainType) => {
       width: 100,
       minWidth: 80,
       maxWidth: 150,
-      headerName: `AlgoExplorer`,
+      headerName: `Allo Explorer`,
       sortable: false,
       headerAlign: `center`,
       headerClassName: `super-app-theme--header`,
       align: `center`,
       renderCell: (params: { row: { acfgTxn: string } }) => {
         return (
-          <ViewOnAlgoExplorerButton
+          <ViewOnAlloExplorerButton
             chain={chain}
             disabled={params.row.acfgTxn.includes(`Pending`)}
             txId={params.row.acfgTxn}

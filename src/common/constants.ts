@@ -25,28 +25,16 @@ export const CHAIN_TYPE: ChainType = process.env.NEXT_PUBLIC_CHAIN_TYPE
 export const SITE_IS_UNDER_MAINTENANCE =
   process.env.NEXT_PUBLIC_UNDER_MAINTENANCE === `true`;
 
-export const ALGOEXPLORER_API_URL = (chain: ChainType) => {
-  return chain.toLowerCase() === `mainnet`
-    ? `https://node.algoexplorerapi.io`
-    : `https://node.testnet.algoexplorerapi.io`;
-};
-
-export const ALGOEXPLORER_INDEXER_URL = (chain: ChainType) => {
-  return chain.toLowerCase() === `mainnet`
-    ? `https://algoindexer.algoexplorerapi.io`
-    : `https://algoindexer.testnet.algoexplorerapi.io`;
-};
-
 export const ALGONODE_INDEXER_URL = (chain: ChainType) => {
   return chain.toLowerCase() === `mainnet`
     ? `	https://mainnet-idx.algonode.cloud`
     : `https://testnet-idx.algonode.cloud`;
 };
 
-export const ALGOEXPLORER_URL = (chain: ChainType) => {
+export const ALLO_EXPLORER_URL = (chain: ChainType) => {
   return chain.toLowerCase() === `mainnet`
-    ? `https://algoexplorer.io`
-    : `https://testnet.algoexplorer.io`;
+    ? `https://allo.info`
+    : `https://testnet.allo.info`;
 };
 
 export const EMPTY_ASSET_IMAGE_URL = (gateway: IpfsGateway) => {

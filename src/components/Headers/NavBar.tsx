@@ -63,9 +63,9 @@ import {
   CITY_MANAGER_ADDRESS,
   BUILD_MANAGER_ADDRESS,
 } from '@/common/constants';
-import createAlgoExplorerUrl from '@/utils/createAlgoExplorerUrl';
+import createAlloExplorerUrl from '@/utils/createAlloExplorerUrl';
 import formatBigNumWithDecimals from '@/utils/formatBigNumWithDecimals';
-import AlgoExplorerUrlType from '@/models/AlgoExplorerUrlType';
+import AlloExplorerUrlType from '@/models/AlloExplorerUrlType';
 import {
   NAV_BAR_CHAIN_FORM_CONTROL_ID,
   NAV_BAR_CHAIN_SWITCH_ID,
@@ -111,7 +111,7 @@ type MenuBarSettingItem = {
 };
 
 const settings: MenuBarSettingItem[] = [
-  { label: `AlgoExplorer`, icon: SearchIcon },
+  { label: `Allo Explorer`, icon: SearchIcon },
   { label: `My Transactions`, icon: ReceiptIcon },
   { label: `Logout`, icon: LogoutIcon },
 ];
@@ -201,12 +201,12 @@ const NavBar = () => {
       return;
     }
 
-    if (event.target.textContent === `AlgoExplorer` && activeAddress) {
+    if (event.target.textContent === `Allo Explorer` && activeAddress) {
       window.open(
-        createAlgoExplorerUrl(
+        createAlloExplorerUrl(
           selectedChain,
           activeAddress,
-          AlgoExplorerUrlType.Address,
+          AlloExplorerUrlType.Address,
         ),
         `_blank`,
       );

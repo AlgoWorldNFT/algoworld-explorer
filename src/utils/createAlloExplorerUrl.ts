@@ -16,10 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-enum AlgoExplorerUrlType {
-  Transaction = `Transaction`,
-  Address = `Address`,
-  Asset = `Asset`,
+import { ALLO_EXPLORER_URL } from '@/common/constants';
+import AlloExplorerUrlType from '@/models/AlloExplorerUrlType';
+import { ChainType } from '@/models/Chain';
+
+function AlloExplorerUrlTypeToPath(type: AlloExplorerUrlType) {
+  switch (type) {
+    case AlloExplorerUrlType.Transaction:
+      return `tx`;
+    case AlloExplorerUrlType.Address:
+      return `account`;
+    case AlloExplorerUrlType.Asset:
+      return `asset`;
+  }
 }
 
-export default AlgoExplorerUrlType;
+export default function createAlloExplorerUrl(
+  chain: ChainType,
+  input: string,
+  type: AlloExplorerUrlType,
+) {
+  return `${ALLO_EXPLORER_URL(chain)}/${AlloExplorerUrlTypeToPath(
+    type,
+  )}/${input}`;
+}

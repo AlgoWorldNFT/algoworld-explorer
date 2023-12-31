@@ -23,7 +23,7 @@ import { useAppSelector } from '@/redux/store/hooks';
 import { useAsync } from 'react-use';
 import getPackPurchaseTxns from '@/utils/transactions/getPackPurchaseTxns';
 import parsePackPurchaseTxn from '@/utils/transactions/parsePackPurchaseTxn';
-import ViewOnAlgoExplorerButton from '../Buttons/ViewOnAlgoExplorerButton';
+import ViewOnAlloExplorerButton from '../Buttons/ViewOnAlloExplorerButton';
 import { ChainType } from '@/models/Chain';
 import shortenAddress from '@/utils/shortenAddress';
 
@@ -76,14 +76,14 @@ const getColumns = (chain: ChainType) => {
     {
       field: `action`,
       flex: 1,
-      headerName: `AlgoExplorer`,
+      headerName: `Allo Explorer`,
       sortable: false,
       headerAlign: `center`,
       headerClassName: `super-app-theme--header`,
       align: `center`,
       renderCell: (params) => {
         return (
-          <ViewOnAlgoExplorerButton
+          <ViewOnAlloExplorerButton
             chain={chain}
             txId={params.row.txId}
             customLabel={`View`}

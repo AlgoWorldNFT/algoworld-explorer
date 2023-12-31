@@ -95,9 +95,9 @@ const AssetsImageList = ({ assets }: Props) => {
                 size="small"
                 variant="outlined"
                 target="_blank"
-                href={`https://algoexplorer.io/asset/${item.index}`}
+                href={`https://allo.info/asset/${item.index}`}
               >
-                AlgoExplorer
+                Allo Explorer
               </Button>
               <Button
                 size="small"

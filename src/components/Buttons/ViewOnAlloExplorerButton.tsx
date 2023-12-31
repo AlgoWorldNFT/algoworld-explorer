@@ -19,8 +19,8 @@
 import { Button } from '@mui/material';
 
 import { ChainType } from '@/models/Chain';
-import createAlgoExplorerUrl from '@/utils/createAlgoExplorerUrl';
-import AlgoExplorerUrlType from '@/models/AlgoExplorerUrlType';
+import createAlloExplorerUrl from '@/utils/createAlloExplorerUrl';
+import AlloExplorerUrlType from '@/models/AlloExplorerUrlType';
 
 type Props = {
   txId: string;
@@ -29,7 +29,7 @@ type Props = {
   disabled?: boolean;
 };
 
-const ViewOnAlgoExplorerButton = ({
+const ViewOnAlloExplorerButton = ({
   txId,
   chain,
   customLabel,
@@ -39,11 +39,11 @@ const ViewOnAlgoExplorerButton = ({
     <Button
       target={`_blank`}
       disabled={disabled}
-      href={createAlgoExplorerUrl(chain, txId, AlgoExplorerUrlType.Transaction)}
+      href={createAlloExplorerUrl(chain, txId, AlloExplorerUrlType.Transaction)}
     >
-      {customLabel ? customLabel : `View on AlgoExplorer`}
+      {customLabel ? customLabel : `View on Allo Explorer`}
     </Button>
   );
 };
 
-export default ViewOnAlgoExplorerButton;
+export default ViewOnAlloExplorerButton;

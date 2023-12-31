@@ -50,7 +50,7 @@ import { useSnackbar } from 'notistack';
 import createInfluenceDepositTxns from '@/utils/transactions/createInfluenceDepositTxns';
 import { TransactionToSign } from '@/models/Transaction';
 import useLoadingIndicator from '@/redux/hooks/useLoadingIndicator';
-import ViewOnAlgoExplorerButton from '@/components/Buttons/ViewOnAlgoExplorerButton';
+import ViewOnAlloExplorerButton from '@/components/Buttons/ViewOnAlloExplorerButton';
 import { toIpfsProxyUrl } from '@/utils/toIpfsProxyUrl';
 import { useRouter } from 'next/router';
 import MaintenanceLayout from '@/components/Layouts/MaintenanceLayout';
@@ -170,7 +170,7 @@ const Leaderboard = () => {
             >
               View My Transactions
             </Button>
-            <ViewOnAlgoExplorerButton chain={chain} txId={txId} />
+            <ViewOnAlloExplorerButton chain={chain} txId={txId} />
           </>
         ),
       },
