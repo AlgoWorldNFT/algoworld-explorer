@@ -34,7 +34,7 @@ import {
   ImageListItem,
   ImageListItemBar,
 } from '@mui/material';
-import { AWT_ASSET_ID } from '@/common/constants';
+import { AWT_ASSET_ID, PARIS_ASSET_INDEX, WASHINGTON_ASSET_INDEX } from '@/common/constants';
 import { MapAsset } from '@/models/MapAsset';
 import { TextureType } from '@/models/TextureType';
 
@@ -67,10 +67,38 @@ export const BuildDialog = ({
     (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) >
     depositAsset.cost;
 
+  const ParisAsset = useMemo(() => {
+    const filteredAssets = assets.filter(
+      (asset) => asset.index === PARIS_ASSET_INDEX(chain),
+    );
+    return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
+  }, [assets, chain]);
+
+  const No_Paris_Card =
+    (formatAmount(ParisAsset?.amount, ParisAsset?.decimals) ?? 0) == 0;
+
+  const WashingtonAsset = useMemo(() => {
+    const filteredAssets = assets.filter(
+      (asset) => asset.index === WASHINGTON_ASSET_INDEX(chain),
+    );
+    return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
+  }, [assets, chain]);
+  
+  const No_Washington_Card =
+    (formatAmount(WashingtonAsset?.amount, WashingtonAsset?.decimals) ?? 0) == 0;
+
   /* map_enum is an array created from TextureType, with a filter to keep only text keys */
   const map_enum = Object.keys(TextureType).filter((v) => isNaN(Number(v)));
   /* we remove pending assets */
   const map_enum_filt = map_enum.filter((v) => !v.includes(`pending`));
+  
+  const map_enum_filt_special = map_enum_filt.filter(item => {
+    // Replace these conditions with your own logic
+    if ((item === 'ArcdeTriomphe' && No_Paris_Card) || (item === 'WhiteHouse' && No_Washington_Card)) {
+      return false; // Exclude items that meet the conditions
+    }
+    return true; // Include items that do not meet the conditions
+  });
 
   return (
     <div>
@@ -84,7 +112,7 @@ export const BuildDialog = ({
             cols={3}
             rowHeight={100}
           >
-            {map_enum_filt.map((key) => (
+            {map_enum_filt_special.map((key) => (
               // eslint-disable-next-line react/jsx-no-comment-textnodes
               <ImageListItem
                 key={key}

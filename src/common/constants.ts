@@ -89,3 +89,11 @@ export const PUBLIC_SWAPS_SEARCH_BUTTON_ID = `AWPublicSwapsSearchButton`;
 
 export const TOC_MD: string = process.env.NEXT_PUBLIC_TOC_MD || `N/A`;
 export const PRIVACY_MD: string = process.env.NEXT_PUBLIC_PRIVACY_MD || `N/A`;
+
+export const PARIS_ASSET_INDEX = (chain: ChainType) => {
+  return chain === ChainType.MainNet ? 271518216 : 18986847;
+};
+
+export const WASHINGTON_ASSET_INDEX = (chain: ChainType) => {
+  return chain === ChainType.MainNet ? 276086752 : 18986847;
+};
