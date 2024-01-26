@@ -97,3 +97,11 @@ export const PARIS_ASSET_INDEX = (chain: ChainType) => {
 export const WASHINGTON_ASSET_INDEX = (chain: ChainType) => {
   return chain === ChainType.MainNet ? 276086752 : 18986847;
 };
+
+export const ROME_ASSET_INDEX = (chain: ChainType) => {
+  return chain === ChainType.MainNet ? 273858077 : 18986847;
+};
+
+export const NYC_ASSET_INDEX = (chain: ChainType) => {
+  return chain === ChainType.MainNet ? 271106498 : 18986847;
+};

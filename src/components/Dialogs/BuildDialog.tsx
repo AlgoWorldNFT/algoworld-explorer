@@ -34,7 +34,7 @@ import {
   ImageListItem,
   ImageListItemBar,
 } from '@mui/material';
-import { AWT_ASSET_ID, PARIS_ASSET_INDEX, WASHINGTON_ASSET_INDEX } from '@/common/constants';
+import { AWT_ASSET_ID, PARIS_ASSET_INDEX, WASHINGTON_ASSET_INDEX, ROME_ASSET_INDEX, NYC_ASSET_INDEX } from '@/common/constants';
 import { MapAsset } from '@/models/MapAsset';
 import { TextureType } from '@/models/TextureType';
 
@@ -42,6 +42,7 @@ type Props = {
   onDepositConfirmed: (object: string) => void;
   onDepositCancelled: () => void;
   depositAsset: MapAsset;
+  tilesMap: MapAsset[];
   open: boolean;
 };
 
@@ -49,6 +50,7 @@ export const BuildDialog = ({
   onDepositConfirmed,
   onDepositCancelled,
   depositAsset,
+  tilesMap,
   open,
 }: Props) => {
   const assets = useAppSelector((state) => state.application.assets);
@@ -67,6 +69,8 @@ export const BuildDialog = ({
     (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) >
     depositAsset.cost;
 
+  // PARIS
+  //
   const ParisAsset = useMemo(() => {
     const filteredAssets = assets.filter(
       (asset) => asset.index === PARIS_ASSET_INDEX(chain),
@@ -77,6 +81,15 @@ export const BuildDialog = ({
   const No_Paris_Card =
     (formatAmount(ParisAsset?.amount, ParisAsset?.decimals) ?? 0) == 0;
 
+  const Paris_built = tilesMap.some(item => {
+    // Replace this condition with your own logic
+    return item.object.includes('ArcdeTriomphe'); // Example condition: Return true if item is 'item2'
+  });
+  //
+  //
+
+  // WASHINGTON
+  //
   const WashingtonAsset = useMemo(() => {
     const filteredAssets = assets.filter(
       (asset) => asset.index === WASHINGTON_ASSET_INDEX(chain),
@@ -87,6 +100,63 @@ export const BuildDialog = ({
   const No_Washington_Card =
     (formatAmount(WashingtonAsset?.amount, WashingtonAsset?.decimals) ?? 0) == 0;
 
+  const Washington_built = tilesMap.some(item => {
+      // Replace this condition with your own logic
+      return item.object.includes('WhiteHouse'); // Example condition: Return true if item is 'item2'
+    });
+  
+  // ROME
+  //
+  const RomeAsset = useMemo(() => {
+    const filteredAssets = assets.filter(
+      (asset) => asset.index === ROME_ASSET_INDEX(chain),
+    );
+    return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
+  }, [assets, chain]);
+
+  const No_Rome_Card =
+    (formatAmount(RomeAsset?.amount, RomeAsset?.decimals) ?? 0) == 0;
+
+  const Rome_built = tilesMap.some(item => {
+    // Replace this condition with your own logic
+    return item.object.includes('Colosseum'); // Example condition: Return true if item is 'item2'
+  });
+  //
+  //
+
+  // NEW YORK
+  //
+  const NYCAsset = useMemo(() => {
+    const filteredAssets = assets.filter(
+      (asset) => asset.index === NYC_ASSET_INDEX(chain),
+    );
+    return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
+  }, [assets, chain]);
+
+  const No_NYC_Card =
+    (formatAmount(NYCAsset?.amount, NYCAsset?.decimals) ?? 0) == 0;
+
+  const NYC_1_built = tilesMap.some(item => {
+    // Replace this condition with your own logic
+    return item.object.includes('EmpireStateBuilding1'); 
+  });
+  
+  const NYC_2_built = tilesMap.some(item => {
+    // Replace this condition with your own logic
+    return item.object.includes('EmpireStateBuilding2'); 
+  });
+
+  const NYC_3_built = tilesMap.some(item => {
+    // Replace this condition with your own logic
+    return item.object.includes('EmpireStateBuilding3'); 
+  });
+
+  //
+  
+  const object_below = (depositAsset.index + 5) < 36 ? tilesMap[(depositAsset.index + 5)].object : 'OutOfMapRange'
+  
+  const object_above = (depositAsset.index - 7) > 6 ? tilesMap[(depositAsset.index - 7)].object : 'OutOfMapRange'
+
   /* map_enum is an array created from TextureType, with a filter to keep only text keys */
   const map_enum = Object.keys(TextureType).filter((v) => isNaN(Number(v)));
   /* we remove pending assets */
@@ -94,11 +164,17 @@ export const BuildDialog = ({
   
   const map_enum_filt_special = map_enum_filt.filter(item => {
     // Replace these conditions with your own logic
-    if ((item === 'ArcdeTriomphe' && No_Paris_Card) || (item === 'WhiteHouse' && No_Washington_Card)) {
+    if ((item === 'ArcdeTriomphe' && (No_Paris_Card || Paris_built)) || 
+    (item === 'WhiteHouse' && (No_Washington_Card || Washington_built)) || 
+    (item === 'Colosseum' && (No_Rome_Card || Rome_built)) ||
+    (item === 'EmpireStateBuilding1' && (No_NYC_Card || NYC_1_built)) ||
+    (item === 'EmpireStateBuilding2' && (!object_below.includes('EmpireStateBuilding1') || No_NYC_Card || NYC_2_built)) ||
+    (item === 'EmpireStateBuilding3' && (!object_below.includes('EmpireStateBuilding2') || No_NYC_Card || NYC_3_built))) {
       return false; // Exclude items that meet the conditions
     }
     return true; // Include items that do not meet the conditions
   });
+
 
   return (
     <div>
@@ -146,13 +222,17 @@ export const BuildDialog = ({
             ))}
           </ImageList>
 
+          
           <DialogContentText
             fontSize={14}
             sx={{ pt: 2, color: `warning.main` }}
           >
-            {`By pressing Deposit, you are going to update the object for tile ${depositAsset.index} by paying ${depositAsset.cost} AWT.
+            {object_above.includes('EmpireStateBuilding') ? (
+            `Sorry, you can't remove this part of the building. Start removing it starting from its top!`) : (
+            `By pressing Deposit, you are going to update the object for tile ${depositAsset.index} by paying ${depositAsset.cost} AWT.
             Please note that it will take up to 2 hours until ARC69 tag of the tile is
-            updated by the manager wallet after deposit is performed.`}
+            updated by the manager wallet after deposit is performed.`
+            )}
           </DialogContentText>
           {` `}
           <Typography
@@ -180,9 +260,9 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, fontWeight: `bold`, color: `warning.main` }}
           >
-            {`Amount you will pay: ${depositAsset.cost} AWT (available : ${
+            {object_above.includes('EmpireStateBuilding') ? ('') : (`Amount you will pay: ${depositAsset.cost} AWT (available : ${
               formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0
-            } AWT).`}
+            } AWT).`)}
           </Typography>
           <Typography
             fontSize={14}
@@ -204,6 +284,7 @@ export const BuildDialog = ({
           <Button
             disabled={
               !(
+                !object_above.includes('EmpireStateBuilding') &&
                 enough_awt &&
                 selectedobject &&
                 !depositAsset.object.includes(selectedobject)

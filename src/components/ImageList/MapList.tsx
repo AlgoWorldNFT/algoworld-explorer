@@ -257,6 +257,7 @@ const MapList = ({ tiles }: Props) => {
               dispatch(setSelectedBuildTile(undefined));
             }}
             depositAsset={selectedBuildTile}
+            tilesMap={tiles}
             open={isBuildPopupOpen}
           />
         )}
