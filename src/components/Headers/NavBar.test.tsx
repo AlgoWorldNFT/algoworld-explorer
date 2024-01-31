@@ -32,7 +32,7 @@ describe(`NavBar`, () => {
         dom.container,
         NAV_BAR_CHAIN_FORM_CONTROL_ID,
       );
-      expect(chainFormControlComponent).toBeInTheDocument();
+      expect(chainFormControlComponent).toBeInTheDocument;
       expect(chainFormControlComponent?.textContent?.toLowerCase()).toBe(
         chainType,
       );
@@ -41,7 +41,7 @@ describe(`NavBar`, () => {
         dom.container,
         NAV_BAR_CHAIN_SWITCH_ID,
       ) as HTMLInputElement;
-      expect(chainSwitchComponent).toBeInTheDocument();
+      expect(chainSwitchComponent).toBeInTheDocument;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       expect(chainSwitchComponent.checked).toBe(chainType === `mainnet`);
     },

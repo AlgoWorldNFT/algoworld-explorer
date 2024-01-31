@@ -164,6 +164,8 @@ const MapList = ({ tiles }: Props) => {
     );
 
     resetLoading();
+
+    location.reload();
   };
 
   const [isChecked_owner, setIsChecked_owner] = useState(false);

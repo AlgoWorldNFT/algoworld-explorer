@@ -15,6 +15,7 @@ describe(`BuildDialog`, () => {
     builder: `builderAddress`,
     owner: `ownerAddress`,
   };
+  const tilesMap = [depositAsset, depositAsset, depositAsset, depositAsset, depositAsset, depositAsset, depositAsset];
   const open = true;
 
   const renderComponent = () =>
@@ -24,6 +25,7 @@ describe(`BuildDialog`, () => {
           onDepositConfirmed={onDepositConfirmed}
           onDepositCancelled={onDepositCancelled}
           depositAsset={depositAsset}
+          tilesMap={tilesMap}
           open={open}
         />
       </Provider>,

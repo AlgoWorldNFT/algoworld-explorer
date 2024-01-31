@@ -8,6 +8,6 @@ describe(`ParticlesContainer`, () => {
   it(`renders the particle container correctly`, () => {
     const { container } = render(<ParticlesContainer />);
     const tsparticles = getById(container, `tsparticles`);
-    expect(tsparticles).toBeInTheDocument();
+    expect(tsparticles).toBeInTheDocument;
   });
 });
