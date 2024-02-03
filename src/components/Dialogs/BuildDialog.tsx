@@ -45,7 +45,7 @@ import { MapAsset } from '@/models/MapAsset';
 import { TextureType } from '@/models/TextureType';
 
 type Props = {
-  onDepositConfirmed: (object: string) => void;
+  onDepositConfirmed: (object: string, cost: number) => void;
   onDepositCancelled: () => void;
   depositAsset: MapAsset;
   tilesMap: MapAsset[];
@@ -64,16 +64,14 @@ export const BuildDialog = ({
 
   const [selectedobject, setSelectedobject] = useState(`Meadow`);
 
+  const [CurrentCost, setCurrentCost] = useState(depositAsset.cost);
+
   const awtAsset = useMemo(() => {
     const filteredAssets = assets.filter(
       (asset) => asset.index === AWT_ASSET_ID(chain),
     );
     return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
   }, [assets, chain]);
-
-  const enough_awt =
-    (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) >
-    depositAsset.cost;
 
   // PARIS
   //
@@ -178,23 +176,22 @@ export const BuildDialog = ({
   const map_enum_filt_special = map_enum_filt.filter((item) => {
     // Replace these conditions with your own logic
     if (
-      (item === 'ArcdeTriomphe' && (No_Paris_Card || Paris_built)) ||
-      (item === 'WhiteHouse' && (No_Washington_Card || Washington_built)) ||
-      (item === 'Colosseum' && (No_Rome_Card || Rome_built)) ||
-      (item === 'EmpireStateBuilding1' && (No_NYC_Card || NYC_1_built)) ||
+      (item === 'ArcdeTriomphe' && Paris_built) ||
+      (item === 'WhiteHouse' && Washington_built) ||
+      (item === 'Colosseum' && Rome_built) ||
+      (item === 'EmpireStateBuilding1' && NYC_1_built) ||
       (item === 'EmpireStateBuilding2' &&
-        (!object_below.includes('EmpireStateBuilding1') ||
-          No_NYC_Card ||
-          NYC_2_built)) ||
+        (!object_below.includes('EmpireStateBuilding1') || NYC_2_built)) ||
       (item === 'EmpireStateBuilding3' &&
-        (!object_below.includes('EmpireStateBuilding2') ||
-          No_NYC_Card ||
-          NYC_3_built))
+        (!object_below.includes('EmpireStateBuilding2') || NYC_3_built))
     ) {
       return false; // Exclude items that meet the conditions
     }
     return true; // Include items that do not meet the conditions
   });
+
+  const enough_awt =
+    (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) > CurrentCost;
 
   return (
     <div>
@@ -220,6 +217,14 @@ export const BuildDialog = ({
                 }}
                 onClick={() => {
                   setSelectedobject(key);
+                  (key === 'Colosseum' && No_Rome_Card) ||
+                  (key === 'ArcdeTriomphe' && No_Paris_Card) ||
+                  (key === 'WhiteHouse' && No_Washington_Card) ||
+                  (key === 'EmpireStateBuilding1' && No_NYC_Card) ||
+                  (key === 'EmpireStateBuilding2' && No_NYC_Card) ||
+                  (key === 'EmpireStateBuilding3' && No_NYC_Card)
+                    ? setCurrentCost(depositAsset.cost * 5)
+                    : setCurrentCost(depositAsset.cost);
                 }}
               >
                 <img
@@ -248,9 +253,18 @@ export const BuildDialog = ({
           >
             {object_above.includes('EmpireStateBuilding')
               ? `Sorry, you can't remove this part of the building. Start removing it starting from its top!`
-              : `By pressing Deposit, you are going to update the object for tile ${depositAsset.index} by paying ${depositAsset.cost} AWT.
+              : `By pressing Deposit, you are going to update the object for tile ${depositAsset.index} by paying ${CurrentCost} AWT.
             Please note that it will take up to 2 hours until ARC69 tag of the tile is
             updated by the manager wallet after deposit is performed.`}
+          </DialogContentText>
+          {` `}
+          <DialogContentText
+            fontSize={18}
+            sx={{ pt: 2, color: `warning.main` }}
+          >
+            {CurrentCost > depositAsset.cost
+              ? `Warning ! You don't have any city card corresponding to this special tile. You will pay 5 times the normal price to build it.`
+              : ``}
           </DialogContentText>
           {` `}
           <Typography
@@ -280,7 +294,7 @@ export const BuildDialog = ({
           >
             {object_above.includes('EmpireStateBuilding')
               ? ''
-              : `Amount you will pay: ${depositAsset.cost} AWT (available : ${
+              : `Amount you will pay: ${CurrentCost} AWT (available : ${
                   formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0
                 } AWT).`}
           </Typography>
@@ -307,14 +321,15 @@ export const BuildDialog = ({
             disabled={
               !(
                 !object_above.includes('EmpireStateBuilding') &&
-                enough_awt &&
+                (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) >
+                  CurrentCost &&
                 selectedobject &&
                 !depositAsset.object.includes(selectedobject)
               )
             }
             onClick={() => {
               if (awtAsset && selectedobject) {
-                onDepositConfirmed(selectedobject);
+                onDepositConfirmed(selectedobject, CurrentCost);
                 setSelectedobject(`0`);
               }
             }}

@@ -244,10 +244,13 @@ const MapList = ({ tiles }: Props) => {
 
         {selectedBuildTile && isBuildPopupOpen && (
           <BuildDialog
-            onDepositConfirmed={function (objectType: string): void {
+            onDepositConfirmed={function (
+              objectType: string,
+              cost: number,
+            ): void {
               dispatch(setIsBuildPopupOpen(false));
               handleBuildTile(
-                selectedBuildTile.cost,
+                cost,
                 objectType,
                 selectedBuildTile.index,
                 selectedBuildTile.owner,

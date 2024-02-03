@@ -15,7 +15,15 @@ describe(`BuildDialog`, () => {
     builder: `builderAddress`,
     owner: `ownerAddress`,
   };
-  const tilesMap = [depositAsset, depositAsset, depositAsset, depositAsset, depositAsset, depositAsset, depositAsset];
+  const tilesMap = [
+    depositAsset,
+    depositAsset,
+    depositAsset,
+    depositAsset,
+    depositAsset,
+    depositAsset,
+    depositAsset,
+  ];
   const open = true;
 
   const renderComponent = () =>

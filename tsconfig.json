@@ -2,7 +2,11 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "target": "ES6",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,14 +20,25 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/package.json": ["./package.json"],
-      "@/e2e/*": ["./e2e/*"],
-      "@/public/*": ["./public/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/package.json": [
+        "./package.json"
+      ],
+      "@/e2e/*": [
+        "./e2e/*"
+      ],
+      "@/public/*": [
+        "./public/*"
+      ]
     },
     "incremental": true
   },
-  "exclude": ["node_modules", "**/*.spec.ts"],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ],
   "include": [
     "next-env.d.ts",
     "desc.d.ts",
