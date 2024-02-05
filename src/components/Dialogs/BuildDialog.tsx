@@ -25,6 +25,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useMemo, useState } from 'react';
 import formatAmount from '@/utils/formatAmount';
+import { ChainType } from '@/models/Chain';
 import { FROM_ASSET_PICKER_DIALOG_ID } from './constants';
 import { useAppSelector } from '@/redux/store/hooks';
 import {
@@ -36,10 +37,8 @@ import {
 } from '@mui/material';
 import {
   AWT_ASSET_ID,
-  PARIS_ASSET_INDEX,
-  WASHINGTON_ASSET_INDEX,
-  ROME_ASSET_INDEX,
-  NYC_ASSET_INDEX,
+  SPECIAL_TILES_MAINNET,
+  SPECIAL_TILES_TESTNET,
 } from '@/common/constants';
 import { MapAsset } from '@/models/MapAsset';
 import { TextureType } from '@/models/TextureType';
@@ -73,96 +72,34 @@ export const BuildDialog = ({
     return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
   }, [assets, chain]);
 
-  // PARIS
-  //
-  const ParisAsset = useMemo(() => {
-    const filteredAssets = assets.filter(
-      (asset) => asset.index === PARIS_ASSET_INDEX(chain),
-    );
-    return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
-  }, [assets, chain]);
+  const SPECIAL_TILES = useMemo(() => {
+    return chain === ChainType.MainNet
+      ? SPECIAL_TILES_MAINNET
+      : SPECIAL_TILES_TESTNET;
+  }, [chain]);
 
-  const No_Paris_Card =
-    (formatAmount(ParisAsset?.amount, ParisAsset?.decimals) ?? 0) == 0;
+  let assets_held_temp: number[] = [];
+  // returns an array with asset amount for each city associated to a special tile
+  const assets_held: number[] = useMemo(() => {
+    SPECIAL_TILES.forEach((special_tile) => {
+      const filteredAssets = assets.filter(
+        (asset) => asset.index === special_tile.city_asset,
+      );
+      const asset_info =
+        filteredAssets.length === 1 ? filteredAssets[0] : undefined;
+      assets_held_temp[SPECIAL_TILES.indexOf(special_tile)] =
+        formatAmount(asset_info?.amount, asset_info?.decimals) ?? 0;
+    });
+    return assets_held_temp;
+  }, [assets]);
 
-  const Paris_built = tilesMap.some((item) => {
-    // Replace this condition with your own logic
-    return item.object.includes('ArcdeTriomphe'); // Example condition: Return true if item is 'item2'
-  });
-  //
-  //
-
-  // WASHINGTON
-  //
-  const WashingtonAsset = useMemo(() => {
-    const filteredAssets = assets.filter(
-      (asset) => asset.index === WASHINGTON_ASSET_INDEX(chain),
-    );
-    return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
-  }, [assets, chain]);
-
-  const No_Washington_Card =
-    (formatAmount(WashingtonAsset?.amount, WashingtonAsset?.decimals) ?? 0) ==
-    0;
-
-  const Washington_built = tilesMap.some((item) => {
-    // Replace this condition with your own logic
-    return item.object.includes('WhiteHouse'); // Example condition: Return true if item is 'item2'
-  });
-
-  // ROME
-  //
-  const RomeAsset = useMemo(() => {
-    const filteredAssets = assets.filter(
-      (asset) => asset.index === ROME_ASSET_INDEX(chain),
-    );
-    return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
-  }, [assets, chain]);
-
-  const No_Rome_Card =
-    (formatAmount(RomeAsset?.amount, RomeAsset?.decimals) ?? 0) == 0;
-
-  const Rome_built = tilesMap.some((item) => {
-    // Replace this condition with your own logic
-    return item.object.includes('Colosseum'); // Example condition: Return true if item is 'item2'
-  });
-  //
-  //
-
-  // NEW YORK
-  //
-  const NYCAsset = useMemo(() => {
-    const filteredAssets = assets.filter(
-      (asset) => asset.index === NYC_ASSET_INDEX(chain),
-    );
-    return filteredAssets.length === 1 ? filteredAssets[0] : undefined;
-  }, [assets, chain]);
-
-  const No_NYC_Card =
-    (formatAmount(NYCAsset?.amount, NYCAsset?.decimals) ?? 0) == 0;
-
-  const NYC_1_built = tilesMap.some((item) => {
-    // Replace this condition with your own logic
-    return item.object.includes('EmpireStateBuilding1');
-  });
-
-  const NYC_2_built = tilesMap.some((item) => {
-    // Replace this condition with your own logic
-    return item.object.includes('EmpireStateBuilding2');
-  });
-
-  const NYC_3_built = tilesMap.some((item) => {
-    // Replace this condition with your own logic
-    return item.object.includes('EmpireStateBuilding3');
-  });
-
-  //
-
+  // object below the selected tile
   const object_below =
     depositAsset.index + 5 < 36
       ? tilesMap[depositAsset.index + 5].object
       : 'OutOfMapRange';
 
+  // object above the selected tile
   const object_above =
     depositAsset.index - 7 > 6
       ? tilesMap[depositAsset.index - 7].object
@@ -173,25 +110,27 @@ export const BuildDialog = ({
   /* we remove pending assets */
   const map_enum_filt = map_enum.filter((v) => !v.includes(`pending`));
 
+  // We want to filter the selection based on tiles already built
+  // For the Empire State Building, we need some additional conditions
   const map_enum_filt_special = map_enum_filt.filter((item) => {
-    // Replace these conditions with your own logic
     if (
-      (item === 'ArcdeTriomphe' && Paris_built) ||
-      (item === 'WhiteHouse' && Washington_built) ||
-      (item === 'Colosseum' && Rome_built) ||
-      (item === 'EmpireStateBuilding1' && NYC_1_built) ||
+      // the tile is a special tile
+      (SPECIAL_TILES.some((special_tile) => {
+        return special_tile.object === item;
+      }) &&
+        // the tile is already built
+        tilesMap.some((item_built) => {
+          return item_built.object.includes(item);
+        })) ||
       (item === 'EmpireStateBuilding2' &&
-        (!object_below.includes('EmpireStateBuilding1') || NYC_2_built)) ||
+        !object_below.includes('EmpireStateBuilding1')) ||
       (item === 'EmpireStateBuilding3' &&
-        (!object_below.includes('EmpireStateBuilding2') || NYC_3_built))
+        !object_below.includes('EmpireStateBuilding2'))
     ) {
       return false; // Exclude items that meet the conditions
     }
     return true; // Include items that do not meet the conditions
   });
-
-  const enough_awt =
-    (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) > CurrentCost;
 
   return (
     <div>
@@ -217,12 +156,12 @@ export const BuildDialog = ({
                 }}
                 onClick={() => {
                   setSelectedobject(key);
-                  (key === 'Colosseum' && No_Rome_Card) ||
-                  (key === 'ArcdeTriomphe' && No_Paris_Card) ||
-                  (key === 'WhiteHouse' && No_Washington_Card) ||
-                  (key === 'EmpireStateBuilding1' && No_NYC_Card) ||
-                  (key === 'EmpireStateBuilding2' && No_NYC_Card) ||
-                  (key === 'EmpireStateBuilding3' && No_NYC_Card)
+                  SPECIAL_TILES.some((special_tile) => {
+                    return (
+                      special_tile.object === key &&
+                      assets_held[SPECIAL_TILES.indexOf(special_tile)] === 0
+                    );
+                  })
                     ? setCurrentCost(depositAsset.cost * 5)
                     : setCurrentCost(depositAsset.cost);
                 }}
