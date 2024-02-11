@@ -164,6 +164,8 @@ const MapList = ({ tiles }: Props) => {
     );
 
     resetLoading();
+
+    location.reload();
   };
 
   const [isChecked_owner, setIsChecked_owner] = useState(false);
@@ -242,10 +244,13 @@ const MapList = ({ tiles }: Props) => {
 
         {selectedBuildTile && isBuildPopupOpen && (
           <BuildDialog
-            onDepositConfirmed={function (objectType: string): void {
+            onDepositConfirmed={function (
+              objectType: string,
+              cost: number,
+            ): void {
               dispatch(setIsBuildPopupOpen(false));
               handleBuildTile(
-                selectedBuildTile.cost,
+                cost,
                 objectType,
                 selectedBuildTile.index,
                 selectedBuildTile.owner,
@@ -257,6 +262,7 @@ const MapList = ({ tiles }: Props) => {
               dispatch(setSelectedBuildTile(undefined));
             }}
             depositAsset={selectedBuildTile}
+            tilesMap={tiles}
             open={isBuildPopupOpen}
           />
         )}

@@ -18,6 +18,7 @@
 
 import { ChainType } from '@/models/Chain';
 import { IpfsGateway } from '@/models/Gateway';
+import { SpecialTile } from '@/models/SpecialTile';
 
 export const CHAIN_TYPE: ChainType = process.env.NEXT_PUBLIC_CHAIN_TYPE
   ? (process.env.NEXT_PUBLIC_CHAIN_TYPE.trim().toLowerCase() as ChainType)
@@ -89,3 +90,21 @@ export const PUBLIC_SWAPS_SEARCH_BUTTON_ID = `AWPublicSwapsSearchButton`;
 
 export const TOC_MD: string = process.env.NEXT_PUBLIC_TOC_MD || `N/A`;
 export const PRIVACY_MD: string = process.env.NEXT_PUBLIC_PRIVACY_MD || `N/A`;
+
+export const SPECIAL_TILES_MAINNET: SpecialTile[] = [
+  { object: `ArcdeTriomphe`, city_asset: 271518216 },
+  { object: `WhiteHouse`, city_asset: 276086752 },
+  { object: `Colosseum`, city_asset: 273858077 },
+  { object: `EmpireStateBuilding1`, city_asset: 271106498 },
+  { object: `EmpireStateBuilding2`, city_asset: 271106498 },
+  { object: `EmpireStateBuilding3`, city_asset: 271106498 },
+];
+
+export const SPECIAL_TILES_TESTNET: SpecialTile[] = [
+  { object: `ArcdeTriomphe`, city_asset: 18986847 },
+  { object: `WhiteHouse`, city_asset: 18986847 },
+  { object: `Colosseum`, city_asset: 22889001 },
+  { object: `EmpireStateBuilding1`, city_asset: 18986847 },
+  { object: `EmpireStateBuilding2`, city_asset: 18986847 },
+  { object: `EmpireStateBuilding3`, city_asset: 18986847 },
+];
