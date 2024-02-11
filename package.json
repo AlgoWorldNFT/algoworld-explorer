@@ -1,7 +1,7 @@
 {
   "name": "algoworld-explorer",
   "description": "Open source version of AlgoWorldExplorer powered by Algorand ⚡️",
-  "version": "0.5.1",
+  "version": "1.22.21",
   "private": true,
   "author": "AlgoWorld <info@algoworld.io>",
   "license": "GPL-3.0",
