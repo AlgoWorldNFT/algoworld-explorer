@@ -78,7 +78,7 @@ export const BuildDialog = ({
       : SPECIAL_TILES_TESTNET;
   }, [chain]);
 
-  let assets_held_temp: number[] = [];
+  const assets_held_temp: number[] = [];
   // returns an array with asset amount for each city associated to a special tile
   const assets_held: number[] = useMemo(() => {
     SPECIAL_TILES.forEach((special_tile) => {
@@ -97,13 +97,13 @@ export const BuildDialog = ({
   const object_below =
     depositAsset.index + 5 < 36
       ? tilesMap[depositAsset.index + 5].object
-      : 'OutOfMapRange';
+      : `OutOfMapRange`;
 
   // object above the selected tile
   const object_above =
     depositAsset.index - 7 > 6
       ? tilesMap[depositAsset.index - 7].object
-      : 'OutOfMapRange';
+      : `OutOfMapRange`;
 
   /* map_enum is an array created from TextureType, with a filter to keep only text keys */
   const map_enum = Object.keys(TextureType).filter((v) => isNaN(Number(v)));
@@ -122,10 +122,10 @@ export const BuildDialog = ({
         tilesMap.some((item_built) => {
           return item_built.object.includes(item);
         })) ||
-      (item === 'EmpireStateBuilding2' &&
-        !object_below.includes('EmpireStateBuilding1')) ||
-      (item === 'EmpireStateBuilding3' &&
-        !object_below.includes('EmpireStateBuilding2'))
+      (item === `EmpireStateBuilding2` &&
+        !object_below.includes(`EmpireStateBuilding1`)) ||
+      (item === `EmpireStateBuilding3` &&
+        !object_below.includes(`EmpireStateBuilding2`))
     ) {
       return false; // Exclude items that meet the conditions
     }
@@ -190,7 +190,7 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, color: `warning.main` }}
           >
-            {object_above.includes('EmpireStateBuilding')
+            {object_above.includes(`EmpireStateBuilding`)
               ? `Sorry, you can't remove this part of the building. Start removing it starting from its top!`
               : `By pressing Deposit, you are going to update the object for tile ${depositAsset.index} by paying ${CurrentCost} AWT.
             Please note that it will take up to 2 hours until ARC69 tag of the tile is
@@ -231,8 +231,8 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, fontWeight: `bold`, color: `warning.main` }}
           >
-            {object_above.includes('EmpireStateBuilding')
-              ? ''
+            {object_above.includes(`EmpireStateBuilding`)
+              ? ``
               : `Amount you will pay: ${CurrentCost} AWT (available : ${
                   formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0
                 } AWT).`}
@@ -241,8 +241,8 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, fontWeight: `bold`, color: `warning.main` }}
           >
-            {object_above.includes('EmpireStateBuilding')
-              ? ''
+            {object_above.includes(`EmpireStateBuilding`)
+              ? ``
               : `Transaction fees: 0.01 Algo`}
           </Typography>
         </DialogContent>
@@ -259,7 +259,7 @@ export const BuildDialog = ({
           <Button
             disabled={
               !(
-                !object_above.includes('EmpireStateBuilding') &&
+                !object_above.includes(`EmpireStateBuilding`) &&
                 (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) >
                   CurrentCost &&
                 selectedobject &&
