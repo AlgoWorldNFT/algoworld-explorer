@@ -16,25 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export enum TextureType {
-  Meadow,
-  Forest,
-  Water,
-  Castle,
-  Colosseum,
-  ArcdeTriomphe,
-  WhiteHouse,
-  EmpireStateBuilding1,
-  EmpireStateBuilding2,
-  EmpireStateBuilding3,
-  Meadow_pending,
-  Forest_pending,
-  Water_pending,
-  Castle_pending,
-  Colosseum_pending,
-  ArcdeTriomphe_pending,
-  WhiteHouse_pending,
-  EmpireStateBuilding1_pending,
-  EmpireStateBuilding2_pending,
-  EmpireStateBuilding3_pending,
-}
+export type SpecialTile = {
+  object: string;
+  city_asset: number;
+};
