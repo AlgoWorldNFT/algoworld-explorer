@@ -11,5 +11,5 @@ it(`renders a heading`, () => {
 
   const heading = screen.getByRole(`heading`);
 
-  expect(heading).toHaveTextContent;
+  expect(heading).toHaveTextContent(`Test Header`);
 });
