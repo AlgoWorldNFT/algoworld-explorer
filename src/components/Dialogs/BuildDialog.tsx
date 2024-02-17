@@ -102,7 +102,7 @@ export const BuildDialog = ({
 
   // object above the selected tile
   const object_above =
-    depositAsset.index - 7 > 6
+    depositAsset.index - 7 >= 0
       ? tilesMap[depositAsset.index - 7].object
       : `OutOfMapRange`;
 
