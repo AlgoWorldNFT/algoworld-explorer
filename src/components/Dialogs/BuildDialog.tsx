@@ -78,9 +78,10 @@ export const BuildDialog = ({
       : SPECIAL_TILES_TESTNET;
   }, [chain]);
 
-  const assets_held_temp: number[] = [];
   // returns an array with asset amount for each city associated to a special tile
   const assets_held: number[] = useMemo(() => {
+    const assets_held_temp: number[] = [];
+
     SPECIAL_TILES.forEach((special_tile) => {
       const filteredAssets = assets.filter(
         (asset) => asset.index === special_tile.city_asset,
@@ -91,7 +92,7 @@ export const BuildDialog = ({
         formatAmount(asset_info?.amount, asset_info?.decimals) ?? 0;
     });
     return assets_held_temp;
-  }, [assets]);
+  }, [SPECIAL_TILES, assets]);
 
   // object below the selected tile
   const object_below =
