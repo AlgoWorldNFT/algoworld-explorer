@@ -191,7 +191,8 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, color: `warning.main` }}
           >
-            {(object_above.includes(`EmpireStateBuilding2`) || object_above.includes(`EmpireStateBuilding3`))
+            {object_above.includes(`EmpireStateBuilding2`) ||
+            object_above.includes(`EmpireStateBuilding3`)
               ? `Sorry, you can't remove this part of the building. Start removing it starting from its top!`
               : `By pressing Deposit, you are going to update the object for tile ${depositAsset.index} by paying ${CurrentCost} AWT.
             Please note that it will take up to 2 hours until ARC69 tag of the tile is
@@ -232,7 +233,8 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, fontWeight: `bold`, color: `warning.main` }}
           >
-            {(object_above.includes(`EmpireStateBuilding2`) || object_above.includes(`EmpireStateBuilding3`))
+            {object_above.includes(`EmpireStateBuilding2`) ||
+            object_above.includes(`EmpireStateBuilding3`)
               ? ``
               : `Amount you will pay: ${CurrentCost} AWT (available : ${
                   formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0
@@ -242,7 +244,8 @@ export const BuildDialog = ({
             fontSize={14}
             sx={{ pt: 2, fontWeight: `bold`, color: `warning.main` }}
           >
-            {(object_above.includes(`EmpireStateBuilding2`) || object_above.includes(`EmpireStateBuilding3`))
+            {object_above.includes(`EmpireStateBuilding2`) ||
+            object_above.includes(`EmpireStateBuilding3`)
               ? ``
               : `Transaction fees: 0.01 Algo`}
           </Typography>
@@ -260,7 +263,10 @@ export const BuildDialog = ({
           <Button
             disabled={
               !(
-                !(object_above.includes(`EmpireStateBuilding2`) || object_above.includes(`EmpireStateBuilding3`)) &&
+                !(
+                  object_above.includes(`EmpireStateBuilding2`) ||
+                  object_above.includes(`EmpireStateBuilding3`)
+                ) &&
                 (formatAmount(awtAsset?.amount, awtAsset?.decimals) ?? 0) >
                   CurrentCost &&
                 selectedobject &&
