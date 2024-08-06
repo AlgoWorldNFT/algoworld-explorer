@@ -96,7 +96,7 @@
     "jest-environment-jsdom": "29.6.4",
     "lint-staged": "13.3.0",
     "node-fetch": "^2.0.0",
-    "postcss": "8.4.28",
+    "postcss": "8.4.31",
     "prettier": "3.0.2",
     "redux-mock-store": "1.5.4",
     "ts-jest": "29.1.1",
