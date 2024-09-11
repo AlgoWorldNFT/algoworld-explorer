@@ -68,8 +68,8 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.7.1",
-    "@commitlint/config-conventional": "17.7.0",
+    "@commitlint/cli": "19.5.0",
+    "@commitlint/config-conventional": "19.5.0",
     "@playwright/test": "1.37.1",
     "@testing-library/jest-dom": "5.17.0",
     "@testing-library/react": "14.0.0",
